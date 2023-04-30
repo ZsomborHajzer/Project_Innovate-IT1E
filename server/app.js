@@ -26,7 +26,8 @@ app.use(morgan("dev"));
 app.use(cors({ origin: true, credentrials: true }));
 
 // routes
-
+const testRoutes = require('./routes/test');
+app.use("/", testRoutes);
 
 
 //port
