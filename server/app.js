@@ -22,8 +22,8 @@ app.use(morgan("dev"));
 app.use(cors({ origin: true, credentrials: true }));
 
 // routes
-const indexPageRoutes = require('./routes/index.js');
-app.use("/", indexPageRoutes);
+const testRoutes = require('./routes/test');
+app.use("/", testRoutes);
 
 const signUpRoutes = require('./routes/signUp.js');
 app.use("/signup", signUpRoutes);
@@ -31,9 +31,6 @@ app.use("/signup", signUpRoutes);
 const homePageRoutes = require("./routes/homePage.js");
 app.use("/homepage", homePageRoutes);
 
-app.get('*', function (req, res) {
-    res.send('Error Page', 404);
-});
 //port
 const port = process.env.PORT || 8080;
 

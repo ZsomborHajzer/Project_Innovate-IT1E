@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
 
+
 //import controllers
-const { getIndexPage } = require('../controllers/index');
+const { getFlashcardsPage } = require('../controllers/flashcards');
 
 //import middlewares
 
 
 // api routes
-router.get('/', getIndexPage)
+router.get('/', getFlashcardsPage)
+
 
 module.exports = router;
