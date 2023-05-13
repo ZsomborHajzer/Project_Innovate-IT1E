@@ -7,12 +7,8 @@ require("dotenv").config();
 const fs = require('fs');
 const path = require('path');
 
-
-
-
 // app
 const app = express();
-
 
 // db
 mongoose.connect(process.env.MONGO_URI, {
@@ -29,11 +25,14 @@ app.use(cors({ origin: true, credentrials: true }));
 const testRoutes = require('./routes/test');
 app.use("/", testRoutes);
 
+const signUpRoutes = require('./routes/signUp.js');
+app.use("/signup", signUpRoutes);
+
+const homePageRoutes = require("./routes/homePage.js");
+app.use("/homepage", homePageRoutes);
 
 //port
-const port = process.env.PORT || 3000;
-
-
+const port = process.env.PORT || 8080;
 
 // listener
 const server = app.listen(port, () => console.log(`server is running on port ${port}`));
