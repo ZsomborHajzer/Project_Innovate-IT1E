@@ -3,12 +3,13 @@ const router = express.Router();
 
 
 //import controllers
-const { getTest } = require('../controllers/test');
+const { getFlashcardsPage } = require('../controllers/flashcards');
 
 //import middlewares
 
 
 // api routes
-router.get('/test', getTest)
+router.get('/', getFlashcardsPage)
+
 
 module.exports = router;
