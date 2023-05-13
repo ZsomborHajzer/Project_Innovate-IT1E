@@ -3,12 +3,12 @@ const router = express.Router();
 
 
 //import controllers
-const { getTest } = require('../controllers/test');
+const { getErrorPage } = require('../controllers/404');
 
 //import middlewares
 
 
 // api routes
-router.get('/test', getTest)
+router.get('/', getErrorPage)
 
 module.exports = router;
