@@ -36,7 +36,11 @@ const flashcardsRouter = require("./routes/flashcards.js");
 app.use("/flashcards", flashcardsRouter);
 
 const profilePageRouter = require("./routes/profile.js");
+const {Router} = require("express");
 app.use("/profile", profilePageRouter);
+
+const testingRouter  = require("./routes/testing.js");
+app.use("/testing", testingRouter);
 
 app.get('*', (req, res) => {
     res.status('404').send('Error Page 404', 404);
