@@ -26,8 +26,8 @@ app.use(bodyParser.json());
 const indexRoutes = require('./routes/index');
 app.use("/", indexRoutes);
 
-const signUpRoutes = require('./routes/signUp.js');
-app.use("/signup", signUpRoutes);
+const authRoutes = require('./routes/auth.js');
+app.use("/auth", authRoutes);
 
 const homePageRoutes = require("./routes/homePage.js");
 app.use("/homepage", homePageRoutes);
