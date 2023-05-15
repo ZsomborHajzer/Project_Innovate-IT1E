@@ -12,9 +12,11 @@ const authController = require('../controllers/auth');
 
 
 //import middlewares
+const isAuth = require('../middleware/is-auth');
 
 
 // api routes
+
 
 //BackEnd Validation Of Registration
 router.put('/signup', [

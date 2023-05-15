@@ -52,7 +52,7 @@ exports.login = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     let loadedUser;
-    User.findOneAndDelete({ email: email }).then(user => {
+    User.findOne({ email: email }).then(user => {
         if (!user) {
             const error = new Error('A user with this email does not exist');
             error.statusCode = 401;
@@ -67,7 +67,7 @@ exports.login = (req, res, next) => {
                 error.statusCode = 401;
                 throw error;
             }
-            const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString() }, 'JWT ', { expiresIn: '2h' });
+            const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString() }, 'JWTSECRETTOKEN', { expiresIn: '2h' });
             res.status(200).json({ token: token, userId: loadedUser._id.toString() })
         })
         .catch(err => {

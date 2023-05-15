@@ -6,9 +6,11 @@ const router = express.Router();
 const { getProfilePage } = require('../controllers/profile');
 
 //import middlewares
+const isAuth = require('../middleware/is-auth');
 
 
 // api routes
-router.get('/', getProfilePage)
+//isAuth currently breaks this since i am not sure how to use it in postman to test it
+router.get('/', isAuth, getProfilePage)
 
 module.exports = router;
