@@ -19,6 +19,7 @@ mongoose.connect(process.env.MONGO_URI, {
 // middleware
 app.use(morgan("dev"));
 app.use(cors({ origin: true, credentrials: true }));
+app.use(bodyParser.json());
 
 // routes
 const indexRoutes = require('./routes/index');
