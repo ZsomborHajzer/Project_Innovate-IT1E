@@ -28,7 +28,7 @@ const userSchema = new Schema({
     }],
     achievements: {
         type: Boolean,
-        required: true
+        required: false
     }
 });
 

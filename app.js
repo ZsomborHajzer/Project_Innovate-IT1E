@@ -8,6 +8,7 @@ require("dotenv").config();
 const fs = require('fs');
 const path = require('path');
 
+
 // app
 const app = express();
 
@@ -21,6 +22,16 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use(morgan("dev"));
 app.use(cors({ origin: true, credentrials: true }));
 app.use(bodyParser.json());
+
+
+//error handeling
+app.use((error, req, res, next) => {
+    console.log(error);
+    const status = error.statusCode || 500;
+    const message = error.message;
+    const data = error.data;
+    res.status(status).json({ message: message, data: data });
+})
 
 // routes
 const indexRoutes = require('./routes/index');
@@ -36,10 +47,10 @@ const flashcardsRouter = require("./routes/flashcards.js");
 app.use("/flashcards", flashcardsRouter);
 
 const profilePageRouter = require("./routes/profile.js");
-const {Router} = require("express");
+const { Router } = require("express");
 app.use("/profile", profilePageRouter);
 
-const testingRouter  = require("./routes/testing.js");
+const testingRouter = require("./routes/testing.js");
 app.use("/testing", testingRouter);
 
 app.get('*', (req, res) => {

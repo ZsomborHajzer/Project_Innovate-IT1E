@@ -1,19 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const { body } = require('express-validator/check');
+const { body } = require('express-validator');
 
 //import models
 const User = require('../models/user');
 
 
 //import controllers
-const { getSignUp } = require('../controllers/auth.js');
+const authController = require('../controllers/auth');
 
 
 //import middlewares
 
 
 // api routes
+
+//BackEnd Validation
 router.put('/signup', [
     body('email')
         .isEmail()
@@ -28,6 +30,6 @@ router.put('/signup', [
     body('password').trim().isLength({ min: 5 }),
     body('firstName').trim().not().isEmpty(),
     body('lastName').trim().not().isEmpty()
-]);
+], authController.signup);
 
 module.exports = router;
