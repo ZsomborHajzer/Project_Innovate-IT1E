@@ -11,4 +11,5 @@ const { getIndexPage } = require('../controllers/index');
 // api routes
 router.get('/', getIndexPage)
 
+
 module.exports = router;

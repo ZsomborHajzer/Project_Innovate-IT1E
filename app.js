@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 require("dotenv").config();
 const fs = require('fs');
 const path = require('path');
@@ -42,7 +43,7 @@ app.get('*', (req, res) => {
 });
 
 //port
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8081;
 
 // listener
 const server = app.listen(port, () => console.log(`server is running on port ${port}`));
