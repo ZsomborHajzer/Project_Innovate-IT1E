@@ -42,6 +42,9 @@ app.use("/profile", profilePageRouter);
 const testingRouter  = require("./routes/testing.js");
 app.use("/testing", testingRouter);
 
+const assigmentsRouter = require("./routes/assigments.js");
+app.use("/assigments", assigmentsRouter);
+
 app.get('*', (req, res) => {
     res.status('404').send('Error Page 404', 404);
 });
