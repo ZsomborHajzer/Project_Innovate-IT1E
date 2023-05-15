@@ -41,7 +41,7 @@ const authRoutes = require('./routes/auth.js');
 app.use("/auth", authRoutes);
 
 const homePageRoutes = require("./routes/homePage.js");
-app.use("/homepage", homePageRoutes);
+app.use("/homep age", homePageRoutes);
 
 const flashcardsRouter = require("./routes/flashcards.js");
 app.use("/flashcards", flashcardsRouter);

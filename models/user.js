@@ -20,15 +20,7 @@ const userSchema = new Schema({
     },
     status: {
         type: String,
-        required: true
-    },
-    flashcards: [{
-        type: String,
-        required: false
-    }],
-    achievements: {
-        type: Boolean,
-        required: false
+        default: "I am a new user"
     }
 });
 
