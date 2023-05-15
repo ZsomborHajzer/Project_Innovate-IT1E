@@ -1,3 +1,4 @@
+
 //import modules
 const express = require('express');
 const mongoose = require('mongoose');
@@ -7,6 +8,7 @@ const bodyParser = require('body-parser');
 require("dotenv").config();
 const fs = require('fs');
 const path = require('path');
+
 
 // app
 const app = express();
@@ -22,12 +24,22 @@ app.use(morgan("dev"));
 app.use(cors({ origin: true, credentrials: true }));
 app.use(bodyParser.json());
 
+
+//error handeling
+app.use((error, req, res, next) => {
+    console.log(error);
+    const status = error.statusCode || 500;
+    const message = error.message;
+    const data = error.data;
+    res.status(status).json({ message: message, data: data });
+})
+
 // routes
 const indexRoutes = require('./routes/index');
 app.use("/", indexRoutes);
 
-const signUpRoutes = require('./routes/signUp.js');
-app.use("/signup", signUpRoutes);
+const authRoutes = require('./routes/auth.js');
+app.use("/auth", authRoutes);
 
 const homePageRoutes = require("./routes/homePage.js");
 app.use("/homepage", homePageRoutes);
@@ -36,14 +48,11 @@ const flashcardsRouter = require("./routes/flashcards.js");
 app.use("/flashcards", flashcardsRouter);
 
 const profilePageRouter = require("./routes/profile.js");
-const {Router} = require("express");
+const { Router } = require("express");
 app.use("/profile", profilePageRouter);
 
-const testingRouter  = require("./routes/testing.js");
+const testingRouter = require("./routes/testing.js");
 app.use("/testing", testingRouter);
-
-const assigmentsRouter = require("./routes/assigments.js");
-app.use("/assigments", assigmentsRouter);
 
 app.get('*', (req, res) => {
     res.status('404').send('Error Page 404', 404);
