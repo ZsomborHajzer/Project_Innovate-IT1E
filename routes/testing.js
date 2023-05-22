@@ -26,6 +26,7 @@ router.get('/', isAuth, getTesting)
 module.exports = router;
 
 // back-end testing (function for AI) //
+console.log(process.env.OPENAI_API_KEY);
 async function startAssistant() {
     var messages = [];
 
