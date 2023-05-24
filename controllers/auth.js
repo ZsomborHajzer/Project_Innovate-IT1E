@@ -70,13 +70,13 @@ exports.login = async (req, res, next) => {
         loadedUser = user;
         return bcrypt.compare(password, user.password);
     })
-        .then(isEqual => {
+        .then(async (isEqual) => {
             if (!isEqual) {
                 const error = new Error("Wrong Password");
                 error.statusCode = 401;
                 throw error;
             }
-            loadedFlashcardCollection = getCollectionId(loadedUser._id);
+            loadedFlashcardCollection = await getCollectionId(loadedUser._id);
             //Error caused by trying to insert flashcardID into  JWT token and not being able to get a respons
             const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString(), loadedFlashcardCollection: loadedFlashcardCollection.toString() }, 'JWTSECRETTOKEN', { expiresIn: '2h' });
             res.status(200).json({ token: token, userId: loadedUser._id.toString(), collectionID: loadedFlashcardCollection.toString() })
