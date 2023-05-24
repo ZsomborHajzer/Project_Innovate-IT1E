@@ -3,18 +3,23 @@ const router = express.Router();
 
 
 //import models
+const User = require('../models/user');
+const { flashcardCollection, flashcardDeck, flashcard } = require('../models/flashcardCollection');
+
+//import middleware
+const isAuth = require('../middleware/is-auth');
 
 
 //import controllers
 const { getFlashcardsPage } = require('../controllers/flashcards');
-
-//import middlewares
 
 
 // api routes
 router.get('/', getFlashcardsPage)
 
 //Create a new set of 
-router.put('/newSet',)
+router.put('/newset', isAuth, (req, res, next) => {
+    getFlashcardsPage.newset;
+})
 
 module.exports = router;

@@ -7,14 +7,14 @@ const flashcardSchema = new Schema({
     deckID: { type: Schema.Types.ObjectId, required: true },
     side1: { type: String, required: true },
     side2: { type: String, required: true }
-})
+}, { collection: "Flashcards" })
 
 //FlashCardSetSchema
 const flashcardDeckSchema = new Schema({
     collectionID: { type: Schema.Types.ObjectId, required: true },
     setTitle: { type: String, required: true },
     flashcards: [flashcardSchema]
-});
+}, { collection: "Decks" });
 
 //FlashCard DB Schemas
 const flashcardCollectionSchema = new Schema({
@@ -26,6 +26,8 @@ const flashcardCollectionSchema = new Schema({
 }, { collection: "FlashcardCollection" });
 
 //exports
-module.exports = mongoose.model('FlashcardCollection', flashcardCollectionSchema);
-module.exports = mongoose.model('FlashcardDecks', flashcardDeckSchema);
-module.exports = mongoose.model('Flashcards', flashcardSchema);
+const flashcardCollection = mongoose.model('FlashcardCollection', flashcardCollectionSchema);
+const flashcardDeck = mongoose.model('FlashcardDecks', flashcardDeckSchema);
+const flashcard = mongoose.model('Flashcards', flashcardSchema);
+
+module.exports = { flashcardCollection, flashcardDeck, flashcard }

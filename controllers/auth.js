@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 //import models
 const User = require('../models/user');
-const flashcardCollectionSchema = require('../models/flashcardCollection');
+const { flashcardCollection, flashcardDeck, flashcard } = require('../models/flashcardCollection');
 
 
 exports.getSignUp = async (req, res) => {
@@ -37,11 +37,11 @@ exports.signup = (req, res, next) => {
         return user.save();
     })
         .then(result => {
-            const flashcardCollection = new flashcardCollectionSchema({
+            const newFlashcardCollection = new flashcardCollection({
                 userID: result._id,
                 flashcardDecks: []
             });
-            flashcardCollection.save();
+            newFlashcardCollection.save();
             res.status(201).json({ message: "User succesfully created!", userId: result._id });
         })
         .catch(err => {
@@ -54,10 +54,13 @@ exports.signup = (req, res, next) => {
 
 //Request email, password -> find user with email -> if no user throw error -> get password -> decrypt and compare -> if false throw error -> if true generate JWT token
 //JWT secret == JWTSECRETKEY , Expires in 1 hour
-exports.login = (req, res, next) => {
+exports.login = async (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     let loadedUser;
+    let loadedFlashcardCollection;
+
+
     User.findOne({ email: email }).then(user => {
         if (!user) {
             const error = new Error('A user with this email does not exist');
@@ -73,8 +76,10 @@ exports.login = (req, res, next) => {
                 error.statusCode = 401;
                 throw error;
             }
-            const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString() }, 'JWTSECRETTOKEN', { expiresIn: '2h' });
-            res.status(200).json({ token: token, userId: loadedUser._id.toString() })
+            loadedFlashcardCollection = getCollectionId(loadedUser._id);
+            //Error caused by trying to insert flashcardID into  JWT token and not being able to get a respons
+            const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString(), loadedFlashcardCollection: loadedFlashcardCollection.toString() }, 'JWTSECRETTOKEN', { expiresIn: '2h' });
+            res.status(200).json({ token: token, userId: loadedUser._id.toString(), collectionID: loadedFlashcardCollection.toString() })
         })
         .catch(err => {
             if (!err.statusCode) {
@@ -82,4 +87,16 @@ exports.login = (req, res, next) => {
             }
             next(err);
         })
+}
+
+
+
+//function to find userID async way since it was needed.
+async function getCollectionId(loadedUserID) {
+    const collection = await flashcardCollection.findOne({ userID: loadedUserID });
+    if (!collection) {
+        error.statusCode = 401;
+        throw new Error(`No collection found.`);
+    }
+    return collection._id;
 }
