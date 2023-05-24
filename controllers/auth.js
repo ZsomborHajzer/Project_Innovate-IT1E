@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 
 //import models
 const User = require('../models/user');
+const flashcardCollectionSchema = require('../models/flashcardCollection');
 
 
 exports.getSignUp = async (req, res) => {
@@ -36,7 +37,12 @@ exports.signup = (req, res, next) => {
         return user.save();
     })
         .then(result => {
-            res.status(201).json({ message: "User succesfully created!", userId: result._id })
+            const flashcardCollection = new flashcardCollectionSchema({
+                userID: result._id,
+                flashcardDecks: []
+            });
+            flashcardCollection.save();
+            res.status(201).json({ message: "User succesfully created!", userId: result._id });
         })
         .catch(err => {
             if (!err.statusCode) {

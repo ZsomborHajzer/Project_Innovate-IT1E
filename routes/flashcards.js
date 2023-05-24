@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 
+//import models
+
+
 //import controllers
 const { getFlashcardsPage } = require('../controllers/flashcards');
 
@@ -11,5 +14,7 @@ const { getFlashcardsPage } = require('../controllers/flashcards');
 // api routes
 router.get('/', getFlashcardsPage)
 
+//Create a new set of 
+router.put('/newSet',)
 
 module.exports = router;
