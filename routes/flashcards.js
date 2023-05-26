@@ -11,15 +11,13 @@ const isAuth = require('../middleware/is-auth');
 
 
 //import controllers
-const { getFlashcardsPage } = require('../controllers/flashcards');
+const { getFlashcardsPage, newset } = require('../controllers/flashcards');
 
 
 // api routes
-router.get('/', getFlashcardsPage)
+router.get('/', getFlashcardsPage);
 
 //Create a new set of 
-router.put('/newset', isAuth, (req, res, next) => {
-    getFlashcardsPage.newset;
-})
+router.put('/newset', isAuth, newset);
 
 module.exports = router;

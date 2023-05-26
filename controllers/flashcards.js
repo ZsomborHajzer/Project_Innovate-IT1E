@@ -8,7 +8,7 @@ exports.getFlashcardsPage = async (req, res) => {
     })
 };
 
-exports.newset = (req, res, next) => {
+exports.newset = (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         const error = new Error("Validation Failed.");
@@ -17,10 +17,22 @@ exports.newset = (req, res, next) => {
         throw error;
     }
     const title = req.body.title;
-    const userID = req.userID;
 
     const deck = new flashcardDeck({
-        userID: userID,
+        collectionId: req.collectionId,
+        setTitle: title,
+        flashcards: []
+    });
+    deck.save();
+    flashcardCollection.findOneAndUpdate({ _id: deck.collectionId }, { $push: { decks: deck.setTitle } });
 
-    })
+    return res.status(201).json({ message: `Deck Successfully created`, deckID: deck._id });
+
+    /* Cat.findOneAndUpdate({age: 17}, {$set:{name:"Naomi"}},function(err, doc){
+    if(err){
+        console.log("Something wrong when updating data!");
+    }
+
+    console.log(doc);
+}); */
 }

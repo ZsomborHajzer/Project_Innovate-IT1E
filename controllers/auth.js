@@ -78,8 +78,8 @@ exports.login = async (req, res, next) => {
             }
             loadedFlashcardCollection = await getCollectionId(loadedUser._id);
             //Error caused by trying to insert flashcardID into  JWT token and not being able to get a respons
-            const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString(), loadedFlashcardCollection: loadedFlashcardCollection.toString() }, 'JWTSECRETTOKEN', { expiresIn: '2h' });
-            res.status(200).json({ token: token, userId: loadedUser._id.toString(), collectionID: loadedFlashcardCollection.toString() })
+            const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString(), collectionId: loadedFlashcardCollection.toString() }, 'JWTSECRETTOKEN', { expiresIn: '2h' });
+            res.status(200).json({ token: token, userId: loadedUser._id.toString(), collectionId: loadedFlashcardCollection.toString() })
         })
         .catch(err => {
             if (!err.statusCode) {
@@ -88,8 +88,6 @@ exports.login = async (req, res, next) => {
             next(err);
         })
 }
-
-
 
 //function to find userID async way since it was needed.
 async function getCollectionId(loadedUserID) {

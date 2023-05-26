@@ -9,9 +9,9 @@ const flashcardSchema = new Schema({
     side2: { type: String, required: true }
 }, { collection: "Flashcards" })
 
-//FlashCardSetSchema
+//FlashCardDeckSchema
 const flashcardDeckSchema = new Schema({
-    collectionID: { type: Schema.Types.ObjectId, required: true },
+    collectionId: { type: Schema.Types.ObjectId, required: true },
     setTitle: { type: String, required: true },
     flashcards: [flashcardSchema]
 }, { collection: "Decks" });
@@ -22,7 +22,7 @@ const flashcardCollectionSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true
     },
-    decks: [flashcardDeckSchema]
+    decks: [String]
 }, { collection: "FlashcardCollection" });
 
 //exports
