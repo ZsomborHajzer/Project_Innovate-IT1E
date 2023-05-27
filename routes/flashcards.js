@@ -15,7 +15,7 @@ const { getFlashcardsPage, newset } = require('../controllers/flashcards');
 
 
 // api routes
-router.get('/', getFlashcardsPage);
+router.get('/', isAuth, getFlashcardsPage);
 
 //Create a new set of 
 router.put('/newset', isAuth, newset);

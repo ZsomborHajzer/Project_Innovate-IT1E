@@ -3,9 +3,18 @@ const { validationResult } = require('express-validator');
 const { flashcardCollection, flashcardDeck, flashcard } = require('../models/flashcardCollection');
 
 exports.getFlashcardsPage = async (req, res) => {
-    res.status(200).json({
-        message: 'Flashcards Is Working!',
-    })
+    const collection = await flashcardCollection.findById({ _id: req.collectionId });
+    let returnedJson = {};
+    if (collection.decks.length === 0) {
+        res.status(204)
+    }
+    for (let i = 0; i < collection.decks.length; i++) {
+        console.log(collection.decks[i].setTitle);
+        var deckKey = "setTitle" + i;
+        var newValue = collection.decks[i].setTitle;
+        returnedJson[deckKey] = newValue;
+    }
+    res.status(201).json(returnedJson);
 };
 
 exports.newset = async (req, res) => {
@@ -25,14 +34,6 @@ exports.newset = async (req, res) => {
     });
     await deck.save();
     await flashcardCollection.findOneAndUpdate({ _id: deck.collectionId }, { $push: { decks: deck } });
-    /*
-        const newFlashcard = new flashcard({
-            deckId: deck._id,
-            side1: req.body.side1,
-            side2: req.body.side2
-        })
-        await newFlashcard.save();
-        await flashcardDeck.findByIdAndUpdate({ _id: newFlashcard.deckId }, { $push: { flashcards: newFlashcard } })  */
 
     for (let i = 1; i < Object.values(req.body).length; i += 2) {
         const side1 = Object.values(req.body)[i];
@@ -45,7 +46,8 @@ exports.newset = async (req, res) => {
         })
         await newFlashcard.save();
         await flashcardDeck.findByIdAndUpdate({ _id: newFlashcard.deckId }, { $push: { flashcards: newFlashcard } })
-
+        //await flashcardCollection.findByIdAndUpdate({})
+        //maybe update the collection that contains the deck as well
     }
 
     return res.status(201).json({ message: `Deck Successfully created`, deckID: deck._id });
