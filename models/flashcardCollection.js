@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 //FlashCardSchema
 const flashcardSchema = new Schema({
-    deckID: { type: Schema.Types.ObjectId, required: true },
+    deckId: { type: Schema.Types.ObjectId, required: true },
     side1: { type: String, required: true },
     side2: { type: String, required: true }
 }, { collection: "Flashcards" })
@@ -22,7 +22,7 @@ const flashcardCollectionSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true
     },
-    decks: [String]
+    decks: [flashcardDeckSchema]
 }, { collection: "FlashcardCollection" });
 
 //exports
