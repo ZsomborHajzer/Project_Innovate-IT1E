@@ -11,7 +11,7 @@ const isAuth = require('../middleware/is-auth');
 
 
 //import controllers
-const { getFlashcardsPage, newset } = require('../controllers/flashcards');
+const { getFlashcardsPage, newset, updateDeck, deleteDeck } = require('../controllers/flashcards');
 
 
 // api routes
@@ -19,5 +19,9 @@ router.get('/', isAuth, getFlashcardsPage);
 
 //Create a new set of 
 router.put('/newset', isAuth, newset);
+
+router.patch('/updateDeck', isAuth, updateDeck)
+
+router.delete('deleteDeck', isAuth, deleteDeck)
 
 module.exports = router;

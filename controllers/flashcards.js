@@ -5,8 +5,8 @@ const { flashcardCollection, flashcardDeck, flashcard } = require('../models/fla
 exports.getFlashcardsPage = async (req, res) => {
     const collection = await flashcardCollection.findById({ _id: req.collectionId });
     let returnedJson = {};
-    if (collection.decks.length === 0) {
-        res.status(204)
+    if (collection.decks.length == 0) {
+        return res.json({ message: "No Decks" }).status(204);
     }
     for (let i = 0; i < collection.decks.length; i++) {
         console.log(collection.decks[i].setTitle);
@@ -18,6 +18,11 @@ exports.getFlashcardsPage = async (req, res) => {
 };
 
 exports.newset = async (req, res) => {
+
+    if (Object.keys(req.body).length === 0) {
+        return res.status(418).json({ Message: "No Deck was created" })
+    }
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         const error = new Error("Validation Failed.");
@@ -43,13 +48,27 @@ exports.newset = async (req, res) => {
             deckId: deck._id,
             side1: side1,
             side2: side2
-        })
+        });
         await newFlashcard.save();
-        await flashcardDeck.findByIdAndUpdate({ _id: newFlashcard.deckId }, { $push: { flashcards: newFlashcard } })
+        await flashcardDeck.findByIdAndUpdate({ _id: newFlashcard.deckId }, { $push: { flashcards: newFlashcard } });
         //await flashcardCollection.findByIdAndUpdate({})
         //maybe update the collection that contains the deck as well
     }
 
     return res.status(201).json({ message: `Deck Successfully created`, deckID: deck._id });
 
+
+
+
+
+
+};
+
+exports.updateDeck = async (req, res, next) => {
+    r
+    res.status(204);
+};
+
+exports.deleteDeck = async (req, res, next) => {
+    res.status(204);
 }
