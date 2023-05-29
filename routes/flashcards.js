@@ -22,6 +22,6 @@ router.put('/newset', isAuth, newset);
 
 router.patch('/updateDeck', isAuth, updateDeck)
 
-router.delete('deleteDeck', isAuth, deleteDeck)
+router.delete('/deleteDeck', isAuth, deleteDeck)
 
 module.exports = router;
