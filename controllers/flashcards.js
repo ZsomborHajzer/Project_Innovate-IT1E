@@ -91,28 +91,37 @@ exports.updateDeck = async (req, res, next) => {
     for (let i = 1; i < newFlashcardCounter; i++) {
         newFlashcardsArr.push(Object.values(req.body)[i]);
     }
+    console.log(currentFlashcardsArr);
+    console.log(newFlashcardsArr);
+
 
     // function to compare and replace items that do not match
     for (let i = 0; i < currentFlashcardsArr.length; i++) {
         if (currentFlashcardsArr[i] !== newFlashcardsArr[i]) {
-            if (i % 2 === 0 || i === 0) {
+            console.log(i);
+            const j = Math.floor(i / 2);
+            const flashcardObj = deck.flashcards[j];
+            const flashcardID = deck.flashcards[j]._id;
+            if ((i % 2 === 0)) {
+                console.log('side 1 updated');
                 //query here to update items in db for flashcard side1
-                flashcardDeck.updateOne({ _id: deck._id }, { $set: { flashcards[Math.floor(i / 2)].side1: newFlashcardsArr[i]} });
-                console.log(newFlashcardsArr[i] + '--side1');
-            } else {
-                //query here to update items in db for flashcard side1
-                console.log(newFlashcardsArr[i] + '--side2');
+                await flashcard.findOneAndUpdate({ _id: flashcardID, deckId: deck._id }, { $set: { side1: newFlashcardsArr[i] } });
+                let promise2 = flashcardDeck.findOneAndUpdate({ _id: deck._id, flashcards: flashcardObj }, { $set: { 'flashcards.$.side1': newFlashcardsArr[i] } });
+                let result = await Promise.all([promise2]);
+                console.log(result);
             }
-
-        } else {
-            console.log(currentFlashcardsArr[i] + "..................");
+            if (i % 2 === 1) {
+                console.log('side 2 updated');
+                await flashcard.findOneAndUpdate({ _id: flashcardID, deckId: deck._id }, { $set: { side2: newFlashcardsArr[i] } });
+                let promise4 = flashcardDeck.findOneAndUpdate({ _id: deck._id, flashcards: flashcardObj }, { $set: { 'flashcards.$.side2': newFlashcardsArr[i] } });
+                let result = await Promise.all([promise4]);
+                console.log(result);
+            }
         }
     }
-    //Contact.update({phone:request.phone}, {$set: { phone: request.phone }}, {upsert: true}, function(err){...})
-    //console.log(currentFlashcardsArr);
-    //console.log(newFlashcardsArr);
-    return res.status(204);
-};
+
+    return res.status(200).json({});
+}
 
 
 exports.deleteDeck = async (req, res, next) => {
