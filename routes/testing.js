@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Configuration,  OpenAIApi } = require('openai');
+const { Configuration, OpenAIApi } = require('openai');
 const readline = require('readline');
 let openai;
 
@@ -19,29 +19,66 @@ router.get('/', getTesting);
 
 module.exports = router;
 
-// Replace "instructions" with your desired instructions
 const instructions = "You are an AI teacher. Answer the questions as clearly and concisely as possible.";
 
-// back-end testing (function for AI) //
+let htmlCss = "HTML and CSS, You are a teacher, write down a test question about HTML and CSS with multiple answers to it, make in a alphabet order, but not say which one is correct.";
+let php = "PHP, You are a teacher, write down a test question about PHP with multiple answers to it, make in a alphabet order, but not say which one is correct.";
+let java = "Java, You are a teacher, write down a test question about Java with multiple answers to it, make in a alphabet order, but not say which one is correct.";
+let arrayPrompts = [htmlCss, php, java];
+
+
+function selectPrompt() {
+    return new Promise(async (resolve) => {
+        console.log("Select a topic:");
+        arrayPrompts.forEach((prompt, index) => {
+            console.log(`${index + 1}: ${prompt.split(',')[0]}`);
+        });
+
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+
+        rl.question("Enter the number of your choice: ", function (userChoice) {
+            const selectedIndex = parseInt(userChoice) - 1;
+            if (selectedIndex >= 0 && selectedIndex < arrayPrompts.length) {
+                resolve(arrayPrompts[selectedIndex]);
+            } else {
+                console.log("Invalid choice! Please try again.");
+                selectPrompt().then(resolve);
+            }
+            rl.close();
+        });
+    });
+}
+
 async function startAssistant() {
-    let response = await openai.createCompletion({
-        model: "text-davinci-003",
-        prompt: "You are a teacher, write down a test question about HTML and CSS with multiple answers to it, make in a alphabet order, but not say which one is correct.",
-        "max_tokens": 256,
-        "temperature": 1,
-    });
+    const selectedPrompt = await selectPrompt();
 
-    let response_text = response.data.choices[0].text;
-    console.log(response_text);
+    let correctAnswers = 0;
+    for (let i = 0; i < 10; i++) {
+        let response = await openai.createCompletion({
+            model: "text-davinci-003",
+            prompt: `\n${selectedPrompt}\n`,
+            "max_tokens": 256,
+            "temperature": 1,
+        });
 
-    // Read user's answer from console
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
+        let response_text = response.data.choices[0].text;
+        console.log(response_text);
 
-    rl.question("Enter your answer: ", async function (userAnswer) {
-        // Check if the answer is correct
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+
+        let userAnswer = await new Promise((resolve) => {
+            rl.question("Enter your answer: ", function (answer) {
+                resolve(answer);
+                rl.close();
+            });
+        });
+
         let checkAnswerResponse = await openai.createCompletion({
             model: "text-davinci-003",
             prompt: `The question is:\n${response_text}\nThe user's answer is ${userAnswer}. Respond 'yes' if the answer is correct, 'no' otherwise.`,
@@ -54,12 +91,13 @@ async function startAssistant() {
 
         if (checkAnswerText.toLowerCase() === 'yes' || checkAnswerText.toLowerCase() === 'correct') {
             console.log("Correct!");
+            correctAnswers++;
         } else {
             console.log("Incorrect!");
         }
+    }
 
-        rl.close();
-    });
+    console.log(`You got ${correctAnswers} out of 10 questions correct!`);
 }
 
 startAssistant();
