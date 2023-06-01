@@ -21,9 +21,9 @@ module.exports = router;
 
 const instructions = "You are an AI teacher. Answer the questions as clearly and concisely as possible.";
 
-let htmlCss = "HTML and CSS, You are a teacher, write down a test question about HTML and CSS with multiple answers to it, make in a alphabet order, but not say which one is correct.";
-let php = "PHP, You are a teacher, write down a test question about PHP with multiple answers to it, make in a alphabet order, but not say which one is correct.";
-let java = "Java, You are a teacher, write down a test question about Java with multiple answers to it, make in a alphabet order, but not say which one is correct.";
+let htmlCss = "HTML and CSS, You are a teacher, be specific, write down a test question about HTML and CSS with multiple answers to it, sometimes ask where is a mistake in a code. Make questions and answers in alphabet order, but not say which one is correct.";
+let php = "PHP, You are a teacher, be specific, write down a test question about PHP with multiple answers to it, sometimes ask where is a mistake in a code. Make questions and answers in alphabet order, but not say which one is correct.";
+let java = "Java, You are a teacher, be specific, write down a test question about Java with multiple answers to it, sometimes ask where is a mistake in a code. Make questions and answers in alphabet order, but not say which one is correct.";
 let arrayPrompts = [htmlCss, php, java];
 
 
