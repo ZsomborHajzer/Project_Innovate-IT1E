@@ -6,7 +6,6 @@ const { body } = require('express-validator');
 //import models
 const User = require('../models/user');
 
-
 //import controllers
 const authController = require('../controllers/auth');
 
@@ -37,5 +36,6 @@ router.put('/signup', [
 ], authController.signup);
 
 router.post('/login', authController.login);
+
 
 module.exports = router;

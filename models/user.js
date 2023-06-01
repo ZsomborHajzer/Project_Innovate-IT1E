@@ -1,6 +1,8 @@
+//dependencies
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+//Schema
 const userSchema = new Schema({
     email: {
         type: String,
@@ -24,4 +26,5 @@ const userSchema = new Schema({
     }
 }, { collection: 'Users' });
 
+//export
 module.exports = mongoose.model('User', userSchema);
