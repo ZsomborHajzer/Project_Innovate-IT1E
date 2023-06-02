@@ -108,7 +108,7 @@ exports.updateDeck = async (req, res, next) => {
                 //query here to update items in db for flashcard side1
                 allPromises.push(flashcard.findOneAndUpdate({ _id: flashcardID, deckId: deck._id }, { $set: { side1: newFlashcardsArr[i] } }));
                 allPromises.push(flashcardDeck.findOneAndUpdate({ _id: deck._id, flashcards: flashcardObj }, { $set: { 'flashcards.$.side1': newFlashcardsArr[i] } }));
-                allPromises.push(flashcardCollection.findOneAndUpdate({ _id: deck.collectionId }, { $set: { _id: deck.collectionId } }));
+                //   allPromises.push(flashcardCollection.findOneAndUpdate({ _id: deck.collectionId }, { $set: { _id: deck.collectionId } }));
                 //let result = await promise2;
                 //console.log(result);
             }
