@@ -168,7 +168,14 @@ exports.updateDeck = async (req, res, next) => {
 
 
 exports.deleteDeck = async (req, res, next) => {
-    res.status(204);
+    let deckId = req.query.deckId;
+    let collectionId = req.collectionId;
+    let deck = await flashcardDeck.findOneAndDelete({ _id: deckId });
+    for (let i = 0; i < deck.flashcards.length; i++) {
+        await flashcard.findOneAndDelete({ _id: deck.flashcards[i]._id });
+    }
+    await flashcardCollection.findOneAndUpdate({ _id: collectionId }, { $pull: { decks: { _id: deckId } } });
+    res.status(200).json({ "message": "Deleted Successfuly" });
 }
 
 /**
