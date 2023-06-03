@@ -1,6 +1,7 @@
 //import models
 const { validationResult } = require('express-validator');
 const { flashcardCollection, flashcardDeck, flashcard } = require('../models/flashcardCollection');
+const { findByIdAndDelete } = require('../models/user');
 
 /**
  * 
@@ -69,16 +70,32 @@ exports.newset = async (req, res) => {
 };
 
 /**
- * TODO: Updatedeck needs to be able to update a deck with new cards. This could be done by either deleting all the previous cards and saving all of the new ones all over again, or it 
- *  TODO: it could be done also by recording all current cards in an array -> recording all the submitted ones in an array as well -> comparing the two array by indicies and if they differ delete/create new ones in the database 
+ * TODO: Updatable Title
+ * TODO: Get deck by ID from the URL.  -> I need to send the ID numbers of each fetched deck on the flashcards/ page, so that front-end can assigne it to eachbutton.
+ * TODO: When the button is Pressed it will put the deckID in the URL, from which I can request it and choose the deck based on that. 
+ */
+
+/**
+ * * Update deck checks the current flashcards, and compares them to the submitted ones. If they exist already, it leaves it alone
+ * * If it exists, but was changed, updates the flashcard, and updates the nested flashcard in the deck as well.
+ * * If it does not exist, it creates the flashcard then, it inserts it into the deck as a nested document.
  */
 
 exports.updateDeck = async (req, res, next) => {
     let currentFlashcardsArr = [];
     let newFlashcardsArr = [];
-    let deck = await flashcardDeck.findById("6473a1f3221e4f7d03f7e8f8");
+    let deck = await flashcardDeck.findOne({ _id: '647a814c1612567ed09f1989' });
     const currentFlashcardCounter = deck.flashcards.length;
     const newFlashcardCounter = Object.keys(req.body).length;
+
+    //sets the title if it was updated, if it was empty give it automatic name "Title"
+    if (!req.body.title.length === 0) {
+        if (deck.setTitle !== req.body.title) {
+            await flashcardDeck.findOneAndUpdate({ _id: deck._id }, { $set: { setTitle: req.body.title } })
+        }
+    } else {
+        await flashcardDeck.findOneAndUpdate({ _id: deck._id }, { $set: { setTitle: "Title" } })
+    }
 
 
     // function to push all current flsahcards into array
@@ -94,46 +111,56 @@ exports.updateDeck = async (req, res, next) => {
     console.log(currentFlashcardsArr);
     console.log(newFlashcardsArr);
 
-    var allPromises = [];
+    let flashcardUpdateIndexId = [];
 
     // function to compare and replace items that do not match
     for (let i = 0; i < currentFlashcardsArr.length; i++) {
         if (currentFlashcardsArr[i] !== newFlashcardsArr[i]) {
-            console.log(i);
             var j = Math.floor(i / 2);
             var flashcardObj = deck.flashcards[j];
             var flashcardID = deck.flashcards[j]._id;
             if ((i % 2 === 0)) {
-                //console.log('side 1 updated');
-                //query here to update items in db for flashcard side1
-                allPromises.push(flashcard.findOneAndUpdate({ _id: flashcardID, deckId: deck._id }, { $set: { side1: newFlashcardsArr[i] } }));
-                allPromises.push(flashcardDeck.findOneAndUpdate({ _id: deck._id, flashcards: flashcardObj }, { $set: { 'flashcards.$.side1': newFlashcardsArr[i] } }));
-                //   allPromises.push(flashcardCollection.findOneAndUpdate({ _id: deck.collectionId }, { $set: { _id: deck.collectionId } }));
-                //let result = await promise2;
-                //console.log(result);
+                let fid = await flashcard.findOneAndUpdate({ _id: flashcardID, deckId: deck._id }, { $set: { side1: newFlashcardsArr[i] } });
+                //    allPromises.push(flashcardDeck.findOneAndUpdate({ _id: deck._id, flashcards: flashcardObj }, { $set: { 'flashcards.$.side1': newFlashcardsArr[i] } }));
+                if (!flashcardUpdateIndexId.includes(fid._id)) {
+                    flashcardUpdateIndexId.push(fid._id);
+                }
             }
             if (i % 2 === 1) {
-                // console.log('side 2 updated');
-                allPromises.push(flashcard.findOneAndUpdate({ _id: flashcardID, deckId: deck._id }, { $set: { side2: newFlashcardsArr[i] } }));
-                allPromises.push(flashcardDeck.findOneAndUpdate({ _id: deck._id, flashcards: flashcardObj }, { $set: { 'flashcards.$.side2': newFlashcardsArr[i] } }));
-                allPromises.push(flashcardCollection.findByIdAndUpdate({ _id: deck.collectionId }, { $set: { _id: deck.collectionId } }));
-                //let result = await promise4;
-                //console.log(result);
+                let fid = await flashcard.findOneAndUpdate({ _id: flashcardID, deckId: deck._id }, { $set: { side2: newFlashcardsArr[i] } });
+                //    allPromises.push(flashcardDeck.findOneAndUpdate({ _id: deck._id, flashcards: flashcardObj }, { $set: { 'flashcards.$.side2': newFlashcardsArr[i] } }));
+                if (!flashcardUpdateIndexId.includes(fid._id)) {
+                    flashcardUpdateIndexId.push(fid._id);
+                }
             }
         }
     }
-    await Promise.all(allPromises);
-    //console.log(allPromises.toString());
-    /*
 
-    for (let i = 0; i < deck.flashcards.length; i++) {
-        const updatedFlashcard = await flashcard.findOne();
-        await flashcardDeck.findOneAndUpdate({ _id: deck._id, flashcards: deck.flashcards[i] }, { $set: { flashcards: } })
+    //Check on all the updated flashcards, and also update the flashcards that are nested in the deck
+    for (let i = 0; i < flashcardUpdateIndexId.length; i++) {
+
+        let loadedFlashcard = await flashcard.findById(flashcardUpdateIndexId[i]);
+        await flashcardDeck.findOneAndUpdate({ _id: deck._id, 'flashcards._id': loadedFlashcard._id }, { $set: { 'flashcards.$': loadedFlashcard } }, { new: true });
+
     }
-*/
 
+    //if the user added further flashcards, create them and add them to the deck
 
-    return res.status(200).json({});
+    if (currentFlashcardsArr.length < newFlashcardsArr.length) {
+        for (let i = currentFlashcardsArr.length; i < newFlashcardsArr.length; i += 2) {
+            const side1 = Object.values(req.body)[i];
+            const side2 = Object.values(req.body)[i + 1];
+
+            const newFlashcard = new flashcard({
+                deckId: deck._id,
+                side1: side1,
+                side2: side2
+            });
+            await newFlashcard.save();
+            await flashcardDeck.findByIdAndUpdate({ _id: newFlashcard.deckId }, { $push: { flashcards: newFlashcard } });
+        }
+    }
+    return res.status(200).json({ "message": "Updated Successfuly" });
 }
 
 
