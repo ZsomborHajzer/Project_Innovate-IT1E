@@ -19,9 +19,13 @@ exports.getFlashcardsPage = async (req, res) => {
     }
     for (let i = 0; i < collection.decks.length; i++) {
         console.log(collection.decks[i].setTitle);
-        var deckKey = "setTitle" + i;
-        var newValue = collection.decks[i].setTitle;
+        let deckKey = "setTitle" + i;
+        let newValue = collection.decks[i].setTitle;
+        let deckIdKey = "deckId" + i;
+        let deckIdValue = collection.decks[i]._id;
+
         returnedJson[deckKey] = newValue;
+        returnedJson[deckIdKey] = deckIdValue;
     }
     res.status(201).json(returnedJson);
 };
@@ -84,7 +88,7 @@ exports.newset = async (req, res) => {
 exports.updateDeck = async (req, res, next) => {
     let currentFlashcardsArr = [];
     let newFlashcardsArr = [];
-    let deck = await flashcardDeck.findOne({ _id: '647a814c1612567ed09f1989' });
+    let deck = await flashcardDeck.findOne({ _id: req.query.deckId });
     const currentFlashcardCounter = deck.flashcards.length;
     const newFlashcardCounter = Object.keys(req.body).length;
 
@@ -96,7 +100,6 @@ exports.updateDeck = async (req, res, next) => {
     } else {
         await flashcardDeck.findOneAndUpdate({ _id: deck._id }, { $set: { setTitle: "Title" } })
     }
-
 
     // function to push all current flsahcards into array
     for (let i = 0; i < currentFlashcardCounter; i++) {
