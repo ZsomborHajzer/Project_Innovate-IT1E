@@ -10,6 +10,7 @@ exports.getForumPage = async (req, res) => {
 };
 
 exports.getPost = async (req, res) => {
+
     if (req.method === "GET") {
         if (!req.query.questionId) return res.status(422).json({ message: "Invalid Input" });
         const questionId = req.query.questionId;
@@ -26,10 +27,12 @@ exports.getPost = async (req, res) => {
 
         if (type === "question") {
             const existingVote = await User.findOne({ _id: userId, questionVotes: id });
-            if (existingVote) return res.status(422).json({ message: "User has already voted on this post" });
+            if (existingVote) return res.status(403).json({ message: "User has already voted on this post" });
+
             if (value === "1") {
                 await Question.findOneAndUpdate({ _id: id }, { $inc: { votes: value } });
                 await User.findOneAndUpdate({ _id: userId }, { $push: { questionVotes: id } });
+
             } else if (value === "-1") {
                 await Question.findOneAndUpdate({ _id: id }, { $inc: { votes: value } });
                 await User.findOneAndUpdate({ _id: userId }, { $push: { questionVotes: id } });
@@ -37,10 +40,12 @@ exports.getPost = async (req, res) => {
 
         } else if (type === "comment") {
             const existingVote = await User.findOne({ _id: userId, commentVotes: id });
-            if (existingVote) return res.status(422).json({ message: "User has already voted on this comment" });
+            if (existingVote) return res.status(403).json({ message: "User has already voted on this comment" });
+
             if (value === "1") {
                 await Comment.findOneAndUpdate({ _id: id }, { $inc: { votes: value } });
                 await User.findOneAndUpdate({ _id: userId }, { $push: { commentVotes: id } });
+
             } else if (value === "-1") {
                 await Comment.findOneAndUpdate({ _id: id }, { $inc: { votes: value } });
                 await User.findOneAndUpdate({ _id: userId }, { $push: { commentVotes: id } });
@@ -52,12 +57,13 @@ exports.getPost = async (req, res) => {
 
 exports.newPost = async (req, res) => {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
         return res.status(422).json({ message: "Invalid Input" });
     }
     const question = req.body.question;
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
+    const firstName = req.firstName;
+    const lastName = req.lastName;
     const userId = req.userId;
     const tag = req.body.tag;
     const newQuestion = new Question({
@@ -73,14 +79,19 @@ exports.newPost = async (req, res) => {
 
 exports.newComment = async (req, res) => {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
         return res.status(422).json({ message: "Invalid Input" });
     }
     const comment = req.body.comment;
     const questionId = req.body.questionId;
     const userId = req.userId;
+    const fisrtName = req.firstName;
+    const lastName = req.lastName;
     const newComment = new Comment({
         comment: comment,
+        firstName: fisrtName,
+        lastName: lastName,
         questionId: questionId,
         userId: userId
     });

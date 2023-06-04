@@ -44,6 +44,14 @@ const commentSchema = new Schema({
         type: String,
         required: true
     },
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastName: {
+        type: String,
+        required: true
+    },
     questionId: {
         type: Schema.Types.ObjectId,
         ref: 'Question',

@@ -9,9 +9,11 @@ const { flashcardCollection, flashcardDeck, flashcard } = require('../models/fla
 exports.getFlashcardsPage = async (req, res) => {
     const collection = await flashcardCollection.findById({ _id: req.collectionId });
     let returnedJson = {};
+
     if (collection.decks.length == 0) {
         return res.json({ message: "No Decks" }).status(204);
     }
+
     for (let i = 0; i < collection.decks.length; i++) {
         console.log(collection.decks[i].setTitle);
         let deckKey = "setTitle" + i;
@@ -29,15 +31,19 @@ exports.getFlashcardsPage = async (req, res) => {
  */
 
 exports.getDeck = async (req, res) => {
+
     if (!req.query.deckId) {
         return res.status(404).json({ message: "No Deck ID was provided" })
     };
+
     if (req.method === "GET") {
         const deck = await flashcardDeck.findById({ _id: req.query.deckId });
         let returnedJson = {};
+
         if (deck.flashcards.length == 0) {
             return res.json({ message: "No Flashcards" }).status(204);
         }
+
         for (let i = 0; i < deck.flashcards.length; i++) {
             let side1Key = `side1__${i}`;
             let side1Value = deck.flashcards[i].side1;
@@ -50,6 +56,7 @@ exports.getDeck = async (req, res) => {
             returnedJson[flashcardIdKey] = flashcardIdValue;
         }
         res.status(201).json(returnedJson);
+
     } else if (req.method === "DELETE") {
         const flashcardId = req.body.flashcardId;
         const deckId = req.query.deckId;
