@@ -11,17 +11,25 @@ const isAuth = require('../middleware/is-auth');
 
 
 //import controllers
-const { getFlashcardsPage, newset, updateDeck, deleteDeck } = require('../controllers/flashcards');
+const { getFlashcardsPage, newDeck, updateDeck, deleteDeck, getDeck } = require('../controllers/flashcards');
 
 
 // api routes
 router.get('/', isAuth, getFlashcardsPage);
 
-//Create a new set of 
-router.put('/newset', isAuth, newset);
+// route to get the flashcards from a specific deck
+router.get('/getDeck', isAuth, getDeck)
 
+// Route to delete a flashcard from a deck
+router.delete('/getDeck', isAuth, getDeck)
+
+//Create a new deck with flashcards
+router.put('/newDeck', isAuth, newDeck);
+
+//Update an existing deck
 router.patch('/updateDeck', isAuth, updateDeck)
 
+//Delete a deck and its flashcards
 router.delete('/deleteDeck', isAuth, deleteDeck)
 
 module.exports = router;

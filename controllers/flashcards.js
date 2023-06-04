@@ -4,11 +4,7 @@ const { flashcardCollection, flashcardDeck, flashcard } = require('../models/fla
 const { findByIdAndDelete } = require('../models/user');
 
 /**
- * 
- * TODO: I also need to return a deckID value for each of the fetched decks which will allow the front end ppl to
- * TODO: assign ID to each of the deck buttons, and therefore whenever they click on a deck they can redirect to the update page and
- * TODO: an ID number so i know which deck to fetch from the user
- *  
+* * Get Flashcards Page takes in a token parameter of the collectionId, and returns the decks
  */
 
 exports.getFlashcardsPage = async (req, res) => {
@@ -30,7 +26,49 @@ exports.getFlashcardsPage = async (req, res) => {
     res.status(201).json(returnedJson);
 };
 
-exports.newset = async (req, res) => {
+/**
+ * * Get Deck takes in a query parameter of the deckId, and returns the deck with the flashcards
+ */
+
+exports.getDeck = async (req, res) => {
+    if (!req.query.deckId) {
+        return res.status(404).json({ message: "No Deck ID was provided" })
+    };
+    if (req.method === "GET") {
+        const deck = await flashcardDeck.findById({ _id: req.query.deckId });
+        let returnedJson = {};
+        if (deck.flashcards.length == 0) {
+            return res.json({ message: "No Flashcards" }).status(204);
+        }
+        for (let i = 0; i < deck.flashcards.length; i++) {
+            let side1Key = `side1__${i}`;
+            let side1Value = deck.flashcards[i].side1;
+            let side2Key = `side2__${i}`;
+            let side2Value = deck.flashcards[i].side2;
+            let flashcardIdKey = "flashcardId" + i;
+            let flashcardIdValue = deck.flashcards[i]._id;
+            returnedJson[side1Key] = side1Value;
+            returnedJson[side2Key] = side2Value;
+            returnedJson[flashcardIdKey] = flashcardIdValue;
+        }
+        res.status(201).json(returnedJson);
+    } else if (req.method === "DELETE") {
+        const flashcardId = req.body.flashcardId;
+        const deckId = req.query.deckId;
+        await flashcard.findByIdAndDelete({ _id: flashcardId });
+        await flashcardDeck.findOneAndUpdate({ _id: deckId }, { $pull: { flashcards: { _id: flashcardId } } });
+
+        res.status(200).json({ message: "Flashcard Deleted" });
+    }
+};
+
+/**
+ * * New Deck takes in a request body that contains the title of the deck, and the flashcards
+ * * The flashcards are in the form of an object, where the key is the side1, and the value is the side2
+ * * The function creates a new deck, and then creates a new flashcard for each of the key value pairs
+ */
+
+exports.newDeck = async (req, res) => {
 
     if (Object.keys(req.body).length === 0) {
         return res.status(418).json({ Message: "No Deck was created" })
@@ -64,8 +102,6 @@ exports.newset = async (req, res) => {
         });
         await newFlashcard.save();
         await flashcardDeck.findByIdAndUpdate({ _id: newFlashcard.deckId }, { $push: { flashcards: newFlashcard } });
-        //await flashcardCollection.findByIdAndUpdate({})
-        //maybe update the collection that contains the deck as well
     }
 
     return res.status(201).json({ message: `Deck Successfully created`, deckID: deck._id });
@@ -73,11 +109,6 @@ exports.newset = async (req, res) => {
 
 };
 
-/**
- * TODO: Updatable Title
- * TODO: Get deck by ID from the URL.  -> I need to send the ID numbers of each fetched deck on the flashcards/ page, so that front-end can assigne it to eachbutton.
- * TODO: When the button is Pressed it will put the deckID in the URL, from which I can request it and choose the deck based on that. 
- */
 
 /**
  * * Update deck checks the current flashcards, and compares them to the submitted ones. If they exist already, it leaves it alone
@@ -124,14 +155,12 @@ exports.updateDeck = async (req, res, next) => {
             var flashcardID = deck.flashcards[j]._id;
             if ((i % 2 === 0)) {
                 let fid = await flashcard.findOneAndUpdate({ _id: flashcardID, deckId: deck._id }, { $set: { side1: newFlashcardsArr[i] } });
-                //    allPromises.push(flashcardDeck.findOneAndUpdate({ _id: deck._id, flashcards: flashcardObj }, { $set: { 'flashcards.$.side1': newFlashcardsArr[i] } }));
                 if (!flashcardUpdateIndexId.includes(fid._id)) {
                     flashcardUpdateIndexId.push(fid._id);
                 }
             }
             if (i % 2 === 1) {
                 let fid = await flashcard.findOneAndUpdate({ _id: flashcardID, deckId: deck._id }, { $set: { side2: newFlashcardsArr[i] } });
-                //    allPromises.push(flashcardDeck.findOneAndUpdate({ _id: deck._id, flashcards: flashcardObj }, { $set: { 'flashcards.$.side2': newFlashcardsArr[i] } }));
                 if (!flashcardUpdateIndexId.includes(fid._id)) {
                     flashcardUpdateIndexId.push(fid._id);
                 }
@@ -166,6 +195,9 @@ exports.updateDeck = async (req, res, next) => {
     return res.status(200).json({ "message": "Updated Successfuly" });
 }
 
+/**
+ * * Delete Deck takes in a query parameter of the deckId, and deletes the deck and all of its flashcards
+ */
 
 exports.deleteDeck = async (req, res, next) => {
     let deckId = req.query.deckId;
