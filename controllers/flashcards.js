@@ -19,7 +19,6 @@ exports.getFlashcardsPage = async (req, res) => {
         let newValue = collection.decks[i].setTitle;
         let deckIdKey = "deckId" + i;
         let deckIdValue = collection.decks[i]._id;
-
         returnedJson[deckKey] = newValue;
         returnedJson[deckIdKey] = deckIdValue;
     }
@@ -57,7 +56,6 @@ exports.getDeck = async (req, res) => {
         const deckId = req.query.deckId;
         await flashcard.findByIdAndDelete({ _id: flashcardId });
         await flashcardDeck.findOneAndUpdate({ _id: deckId }, { $pull: { flashcards: { _id: flashcardId } } });
-
         res.status(200).json({ message: "Flashcard Deleted" });
     }
 };
@@ -142,9 +140,6 @@ exports.updateDeck = async (req, res, next) => {
     for (let i = 1; i < newFlashcardCounter; i++) {
         newFlashcardsArr.push(Object.values(req.body)[i]);
     }
-    console.log(currentFlashcardsArr);
-    console.log(newFlashcardsArr);
-
     let flashcardUpdateIndexId = [];
 
     // function to compare and replace items that do not match
@@ -170,10 +165,8 @@ exports.updateDeck = async (req, res, next) => {
 
     //Check on all the updated flashcards, and also update the flashcards that are nested in the deck
     for (let i = 0; i < flashcardUpdateIndexId.length; i++) {
-
         let loadedFlashcard = await flashcard.findById(flashcardUpdateIndexId[i]);
         await flashcardDeck.findOneAndUpdate({ _id: deck._id, 'flashcards._id': loadedFlashcard._id }, { $set: { 'flashcards.$': loadedFlashcard } }, { new: true });
-
     }
 
     //if the user added further flashcards, create them and add them to the deck
