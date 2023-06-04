@@ -1,7 +1,6 @@
 //import models
 const { validationResult } = require('express-validator');
 const { flashcardCollection, flashcardDeck, flashcard } = require('../models/flashcardCollection');
-const { findByIdAndDelete } = require('../models/user');
 
 /**
 * * Get Flashcards Page takes in a token parameter of the collectionId, and returns the decks

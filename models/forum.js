@@ -31,6 +31,10 @@ const questionSchema = new Schema({
     votes: {
         type: Number,
         default: 0
+    },
+    tag: {
+        type: String,
+        default: "Other"
     }
 }, { collection: 'Questions' });
 

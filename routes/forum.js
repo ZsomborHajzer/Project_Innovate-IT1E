@@ -17,12 +17,14 @@ router.get('/', isAuth, getForumPage);
 //get a specific post
 router.get('/getPost', isAuth, getPost);
 
+//voting for a specific post or comment
+router.patch('/getPost', isAuth, getPost);
+
 //create a new post
 router.put('/newPost', isAuth, newPost);
 
 //create a new comment
 router.put('/newComment', isAuth, newComment);
-
 
 //export router
 module.exports = router;

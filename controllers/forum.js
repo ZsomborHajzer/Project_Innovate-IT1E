@@ -1,0 +1,86 @@
+// Import validator
+const { validationResult } = require('express-validator');
+//import models
+const { Question, Comment } = require('../models/forum');
+
+exports.getForumPage = async (req, res) => {
+    const questions = await Question.find();
+    res.status(200).json({ questions: questions });
+};
+
+exports.getPost = async (req, res) => {
+    if (req.method === "GET") {
+        if (!req.query.questionId) return res.status(422).json({ message: "Invalid Input" });
+        const questionId = req.query.questionId;
+        const question = await Question.findById(questionId);
+        if (question === null) return res.status(422).json({ message: "No Question in existence" });
+        const comments = await Comment.find({ questionId: questionId });
+        res.status(200).json({ question: question, comments: comments });
+
+    } else if (req.method === "PATCH") {
+
+        /**
+         *  TODO: NEED A WAY TO CHECK IF USER HAS ALREADY VOTED ON A POST OR COMMENT
+         * */
+
+        const type = req.body.type;
+        const id = req.body.id;
+        const value = req.body.value;
+        if (type === "question") {
+            if (value === "1") {
+                await Question.findOneAndUpdate({ _id: id }, { $inc: { votes: value } });
+            } else if (value === "-1") {
+                await Question.findOneAndUpdate({ _id: id }, { $inc: { votes: value } });
+            };
+        } else if (type === "comment") {
+            if (value === "1") {
+                await Comment.findOneAndUpdate({ _id: id }, { $inc: { votes: value } });
+            } else if (value === "-1") {
+                await Comment.findOneAndUpdate({ _id: id }, { $inc: { votes: value } });
+            };
+        };
+        res.status(200).json({ message: "Vote Updated" });
+    };
+}
+
+exports.newPost = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ message: "Invalid Input" });
+    }
+    const question = req.body.question;
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+    const userId = req.userId;
+    const tag = req.body.tag;
+    const newQuestion = new Question({
+        question: question,
+        firstName: firstName,
+        lastName: lastName,
+        userId: userId,
+        tag: tag
+    });
+    await newQuestion.save();
+    res.status(201).json({ message: "Question Created" });
+};
+
+exports.newComment = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ message: "Invalid Input" });
+    }
+    const comment = req.body.comment;
+    const questionId = req.body.questionId;
+    const userId = req.userId;
+    const newComment = new Comment({
+        comment: comment,
+        questionId: questionId,
+        userId: userId
+    });
+    await newComment.save();
+    await Question.findOneAndUpdate({ _id: questionId }, { $push: { comments: newComment._id } });
+    res.status(201).json({ message: "Comment Created" });
+};
+
+
+
