@@ -75,7 +75,7 @@ async function generateQuestions(promptObj) {
 
     for (let i = 0; i < 10; i++) {
         // Include language and topic in a prompt
-        let prompt = `You are a teacher, be specific, write down a test question about ${promptObj.language} (${promptObj.topic}) with multiple answers to it, sometimes ask where is a mistake in a code. Make questions and answers in alphabet order and only use A,B,C,D,E. Do not say which one is correct.`;
+        let prompt = `You are a teacher, be specific, write down a test question about ${promptObj.language} (${promptObj.topic}) with multiple answers to it, make one line gap between them, sometimes ask where is a mistake in a code. Make questions and answers in alphabet order and only use A,B,C,D,E. Do not say which one is correct.`;
 
         let response = await openai.createCompletion({
             model: "text-davinci-003",
