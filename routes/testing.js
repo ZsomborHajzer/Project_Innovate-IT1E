@@ -11,7 +11,7 @@ if (process.env.OPENAI_API_KEY) {
     const configuration = new Configuration({ apiKey: process.env.OPENAI_API_KEY });
     openai = new OpenAIApi(configuration);
 }
-//import controllers
+// import controllers
 const { getTesting } = require('../controllers/testing');
 
 // api routes
@@ -19,19 +19,17 @@ router.get('/', getTesting);
 
 module.exports = router;
 
-const instructions = "You are an AI teacher. Answer the questions as clearly and concisely as possible.";
-
-let htmlCss = "HTML and CSS, You are a teacher, be specific, write down a test question about HTML and CSS with multiple answers to it, sometimes ask where is a mistake in a code. Make questions and answers in alphabet order, but not say which one is correct.";
-let php = "PHP, You are a teacher, be specific, write down a test question about PHP with multiple answers to it, sometimes ask where is a mistake in a code. Make questions and answers in alphabet order, but not say which one is correct.";
-let java = "Java, You are a teacher, be specific, write down a test question about Java with multiple answers to it, sometimes ask where is a mistake in a code. Make questions and answers in alphabet order, but not say which one is correct.";
-let arrayPrompts = [htmlCss, php, java];
-
+let arrayPrompts = [
+    { language: "HTML and CSS", topics: ['Styling', 'Grids', 'Flex boxes', 'HTML syntax'] },
+    { language: "PHP", topics: ['Login and registration', 'Fetching', 'Upload files',] },
+    { language: "Java", topics: ['Basics', 'OOP', 'JUnit testing'] },
+];
 
 function selectPrompt() {
     return new Promise(async (resolve) => {
-        console.log("Select a topic:");
+        console.log("Select a programming language:");
         arrayPrompts.forEach((prompt, index) => {
-            console.log(`${index + 1}: ${prompt.split(',')[0]}`);
+            console.log(`${index + 1}: ${prompt.language}`);
         });
 
         const rl = readline.createInterface({
@@ -39,33 +37,68 @@ function selectPrompt() {
             output: process.stdout
         });
 
-        rl.question("Enter the number of your choice: ", function (userChoice) {
+        rl.question("Enter the number of your choice: ", async function (userChoice) {
             const selectedIndex = parseInt(userChoice) - 1;
             if (selectedIndex >= 0 && selectedIndex < arrayPrompts.length) {
-                resolve(arrayPrompts[selectedIndex]);
+                const selectedLanguage = arrayPrompts[selectedIndex].language;
+                console.log(`You have selected ${selectedLanguage}.`);
+
+                // Display list of topics and ask for topic
+                console.log("Select a topic:");
+                arrayPrompts[selectedIndex].topics.forEach((topic, index) => {
+                    console.log(`${index + 1}: ${topic}`);
+                });
+
+                rl.question("Enter the number of your choice: ", function (userTopicChoice) {
+                    const selectedTopicIndex = parseInt(userTopicChoice) - 1;
+                    if (selectedTopicIndex >= 0 && selectedTopicIndex < arrayPrompts[selectedIndex].topics.length) {
+                        const selectedTopic = arrayPrompts[selectedIndex].topics[selectedTopicIndex];
+                        console.log(`You have selected ${selectedTopic}.`);
+                        resolve({ language: selectedLanguage, topic: selectedTopic });
+                    } else {
+                        console.log("Invalid choice! Please try again.");
+                        selectPrompt().then(resolve);
+                    }
+                    rl.close();
+                });
+
             } else {
                 console.log("Invalid choice! Please try again.");
                 selectPrompt().then(resolve);
             }
-            rl.close();
         });
     });
 }
 
-async function startAssistant() {
-    const selectedPrompt = await selectPrompt();
+async function generateQuestions(promptObj) {
+    let questions = [];
 
-    let correctAnswers = 0;
     for (let i = 0; i < 10; i++) {
+        // Include language and topic in a prompt
+        let prompt = `You are a teacher, be specific, write down a test question about ${promptObj.language} (${promptObj.topic}) with multiple answers to it, sometimes ask where is a mistake in a code. Make questions and answers in alphabet order and only use A,B,C,D,E. Do not say which one is correct.`;
+
         let response = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: `\n${selectedPrompt}\n`,
-            "max_tokens": 256,
+            prompt: prompt,
+            "max_tokens": 2000,
             "temperature": 1,
         });
 
         let response_text = response.data.choices[0].text;
-        console.log(response_text);
+        questions.push(response_text);
+    }
+
+    return questions;
+}
+
+async function startAssistant() {
+    const selectedPrompt = await selectPrompt();
+    const questions = await generateQuestions(selectedPrompt);
+
+    let correctAnswers = 0;
+    for (let i = 0; i < 10; i++) {
+        console.log(`Question ${i + 1}:`);
+        console.log(questions[i]);
 
         const rl = readline.createInterface({
             input: process.stdin,
@@ -81,7 +114,7 @@ async function startAssistant() {
 
         let checkAnswerResponse = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: `The question is:\n${response_text}\nThe user's answer is ${userAnswer}. Respond 'yes' if the answer is correct, 'no' otherwise.`,
+            prompt: `The question is:\n${questions[i]}\nThe user's answer is ${userAnswer}. Respond 'yes' if the answer is correct, 'no' otherwise.`,
             "max_tokens": 10,
             "temperature": 0.5,
         });
