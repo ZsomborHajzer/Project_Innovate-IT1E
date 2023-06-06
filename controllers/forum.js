@@ -61,12 +61,14 @@ exports.newPost = async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(422).json({ message: "Invalid Input" });
     }
+    const title = req.body.title;
     const question = req.body.question;
     const firstName = req.firstName;
     const lastName = req.lastName;
     const userId = req.userId;
     const tag = req.body.tag;
     const newQuestion = new Question({
+        title: title,
         question: question,
         firstName: firstName,
         lastName: lastName,
