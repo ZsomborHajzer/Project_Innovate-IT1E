@@ -29,5 +29,6 @@ module.exports = (req, res, next) => {
     req.collectionId = decodedToken.collectionId;
     req.firstName = decodedToken.firstName;
     req.lastName = decodedToken.lastName;
+    req.email = decodedToken.email;
     next();
 };
