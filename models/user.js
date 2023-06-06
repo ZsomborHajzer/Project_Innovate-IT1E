@@ -20,10 +20,16 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    status: {
-        type: String,
-        default: "I am a new user"
-    }
+    questionVotes: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Question',
+        required: false
+    }],
+    commentVotes: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Comment',
+        required: false
+    }]
 }, { collection: 'Users' });
 
 //export
