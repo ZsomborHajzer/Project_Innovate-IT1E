@@ -57,6 +57,9 @@ app.use("/testing", testingRouter);
 const forumRouter = require("./routes/forum.js");
 app.use("/forum", forumRouter);
 
+const testGeneratorRouter = require("./routes/testGenerator.js");
+app.use("/testGenerator", testGeneratorRouter);
+
 app.get('*', (req, res) => {
     res.status('404').send('Error Page 404', 404);
 });
