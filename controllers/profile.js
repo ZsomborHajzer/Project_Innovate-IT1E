@@ -35,9 +35,9 @@ exports.patchPassword = async (req, res) => {
     if (newPassword.length < 5) {
         return res.status(401).json({ message: "New Password must be at least 5 characters long" });
     };
-    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    const hashedPassword = await bcrypt.hash(newPassword.trim(), 12);
     await User.findByIdAndUpdate({ _id: req.userId }, { $set: { password: hashedPassword } });
 
 
-    res.status(201).json({ message: "Password Changed" })
+    res.status(201).json({ message: "Password Changed" });
 };
