@@ -25,21 +25,23 @@ exports.getTestGenerationPage = async (req, res) => {
 
     console.log(process.env.OPENAI_API_KEY);
 
-
     if (process.env.OPENAI_API_KEY) {
         const configuration = new Configuration({ apiKey: process.env.OPENAI_API_KEY });
         openai = new OpenAIApi(configuration);
     }
 
-    let response = await openai.createCompletion({
-        model: "text-davinci-003",
-        prompt: prompt,
-        "max_tokens": 2000,
-        "temperature": 0.7
-    });
-
-    res.status(200).json({ response: JSON.parse(response.data.choices[0].text) });
-
+    try {
+        let response = await openai.createCompletion({
+            model: "text-davinci-003",
+            prompt: prompt,
+            "max_tokens": 2000,
+            "temperature": 0.7
+        });
+        res.status(200).json({ response: JSON.parse(response.data.choices[0].text) });
+    } catch (err) {
+        res.status(500).json({ error: err });
+        console.log(err);
+    }
 };
 
 
