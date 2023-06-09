@@ -42,7 +42,10 @@ const authRoutes = require('./routes/auth.js');
 app.use("/auth", authRoutes);
 
 const homePageRoutes = require("./routes/homePage.js");
-app.use("/homep age", homePageRoutes);
+app.use("/homepage", homePageRoutes);
+
+const assigmentsRouter = require("./routes/assignments.js");
+app.use("/assignments", assigmentsRouter);
 
 const flashcardsRouter = require("./routes/flashcards.js");
 app.use("/flashcards", flashcardsRouter);
@@ -54,7 +57,11 @@ app.use("/profile", profilePageRouter);
 const testingRouter = require("./routes/testing.js");
 app.use("/testing", testingRouter);
 
+const forumRouter = require("./routes/forum.js");
+app.use("/forum", forumRouter);
 
+const testGeneratorRouter = require("./routes/testGeneration.js");
+app.use("/testGeneration", testGeneratorRouter);
 
 app.get('*', (req, res) => {
     res.status('404').send('Error Page 404', 404);
