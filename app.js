@@ -42,7 +42,10 @@ const authRoutes = require('./routes/auth.js');
 app.use("/auth", authRoutes);
 
 const homePageRoutes = require("./routes/homePage.js");
-app.use("/homep age", homePageRoutes);
+app.use("/homepage", homePageRoutes);
+
+const assigmentsRouter = require("./routes/assignments.js");
+app.use("/assignments", assigmentsRouter);
 
 const flashcardsRouter = require("./routes/flashcards.js");
 app.use("/flashcards", flashcardsRouter);
