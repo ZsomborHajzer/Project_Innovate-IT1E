@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 require("dotenv").config();
 const fs = require('fs');
 const path = require('path');
+const helmet = require('helmet');
 
 
 // app
@@ -20,6 +21,7 @@ mongoose.connect(process.env.MONGO_URI, {
 }).then(() => console.log("DB connected!")).catch(err => console.log('DB Connection Error', err));
 
 // middleware
+app.use(helmet());
 app.use(morgan("dev"));
 app.use(cors({ origin: true, credentrials: true }));
 app.use(bodyParser.json());
