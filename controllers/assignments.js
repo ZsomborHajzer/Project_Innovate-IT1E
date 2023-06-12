@@ -4,7 +4,6 @@ const { db } = require('../models/user');
 const router = express.Router();
 
 //import DB 
-//const User = db.collection('Users');
 const User = require('../models/user');
 const Assignments = db.collection('Assignments')
 
@@ -16,13 +15,6 @@ exports.getAssigment = async (req, res) => {
 };
 
 exports.getSpecificAssigment = async (req, res) => {
-    /*if user sends something to show that the assignement was finished, eg: {
-        "topic": "PHP",
-        "title": "PHP assignement title"
-        "assigment" : "completed"
-    }
-    update the database of the user so that we save the question title to the correct dataset.
-    */
 
     if (req.method === "GET") {
         const topic = req.body.topic;
@@ -40,9 +32,8 @@ exports.getSpecificAssigment = async (req, res) => {
     }
 
     if (req.method === "PATCH") {
-        /** Logic to get data, based on that data sent we need to query the correct part of the user document and update it */
-        const topic = req.body.topic; // topic = "PHP" || "JAVA" || "HTML/CSS"
-        const title = req.body.title; // title can be any of the assignements on DB
+        const topic = req.body.topic;
+        const title = req.body.title;
         const completed = req.body.completed;
 
         if (topic === "PHP") {
@@ -76,6 +67,7 @@ exports.getSpecificAssigment = async (req, res) => {
             await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedHTMLCSSAssigments: title } });
             res.status(200).json({ message: "Assignment completed" });
         }
+        res.status(404).json({ message: "Assignment not found" });
     }
 
 };
