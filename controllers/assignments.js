@@ -4,6 +4,7 @@ const { db } = require('../models/user');
 const router = express.Router();
 
 //import DB 
+const User = require('../models/user');
 const Assignments = db.collection('Assignments')
 
 exports.getAssigment = async (req, res) => {
@@ -14,18 +15,33 @@ exports.getAssigment = async (req, res) => {
 };
 
 exports.getSpecificAssigment = async (req, res) => {
-    const topic = req.body.topic;
-    const questionNum = req.body.questionNum;
-    const questionObj = await Assignments.findOne({ topic: topic });
-
-    for (let i = 0; i < questionObj.questions.length; i++) {
-        if (questionObj.questions[i].questionNum === questionNum) {
-            console.log(questionObj.questions[i].question);
-            res.status(200).json({ question: questionObj.questions[i] });
-            return;
-        }
+    /*if user sends something to show that the assignement was finished, eg: {
+        "topic": "PHP",
+        "title": "PHP assignement title"
+        "assigment" : "completed"
     }
-    res.status(404).json({ message: "Question not found" });
+    update the database of the user so that we save the question title to the correct dataset.
+    */
+
+    if (req.method === "GET") {
+        const topic = req.body.topic;
+        const questionNum = req.body.questionNum;
+        const questionObj = await Assignments.findOne({ topic: topic });
+
+        for (let i = 0; i < questionObj.questions.length; i++) {
+            if (questionObj.questions[i].questionNum === questionNum) {
+                console.log(questionObj.questions[i].question);
+                res.status(200).json({ question: questionObj.questions[i] });
+                return;
+            }
+        }
+        res.status(404).json({ message: "Question not found" });
+    }
+
+    if (req.method === "patch") {
+        req.status(200).json({ "message": "YEET" });
+    }
+
 };
 
 exports.getNumberOfQuestions = async (req, res) => {

@@ -63,6 +63,10 @@ app.use("/forum", forumRouter);
 const testGeneratorRouter = require("./routes/testGeneration.js");
 app.use("/testGeneration", testGeneratorRouter);
 
+/*
+const achievementsRouter = require("./routes/achievements.js");
+app.use("/achievements", achievementsRouter);*/
+
 app.get('*', (req, res) => {
     res.status('404').send('Error Page 404', 404);
 });
