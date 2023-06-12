@@ -30,9 +30,7 @@ const userSchema = new Schema({
         ref: 'Comment',
         required: false
     }],
-    completedPHPAssigments: [{
-        title: String,
-    }],
+    completedPHPAssigments: [String],
     completedJAVAAssigments: [{
         title: String,
     }],

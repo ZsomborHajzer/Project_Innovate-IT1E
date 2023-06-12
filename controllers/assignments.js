@@ -46,10 +46,15 @@ exports.getSpecificAssigment = async (req, res) => {
 
 
         if (topic === "PHP") {
-            const array = await User.distinct("completedPHPAssigments.$", { userId: req.userId })
-            console.log(array);
-            //if we do not find this in the user
-            // await User.findOneAndUpdate({ userId: req.userId }, { $push: { completedPHPAssigments: title } })
+            const completedAssignmentsArr = await User.distinct("completedPHPAssigments.$", { userId: req.userId })
+            if (!completedAssignmentsArr.includes(title)) {
+                await User.findOneAndUpdate({ userId: req.userId }, { $push: { completedPHPAssigments: title } })
+                res.status(200).json({ "message": "assignment completed" });
+            } else {
+                res.status(200).json({ "message": "assignment was already completed" });
+            };
+
+
 
         } else if (topic === "JAVA") {
             await User.findOneAndUpdate({ userId: req.userId }, { $push: { completedJAVAAssigments: title } })
@@ -59,8 +64,7 @@ exports.getSpecificAssigment = async (req, res) => {
         } else {
             res.status(404).json({ "message": "ayayaya error here" });
         }
-    }
-
+    };
 };
 
 exports.getNumberOfQuestions = async (req, res) => {
@@ -73,4 +77,4 @@ exports.getNumberOfQuestions = async (req, res) => {
     const HTMLNum = HTMLObj.questions.length;
 
     res.status(200).json({ PHPNum: PHPNum, JAVANum: JAVANum, HTMLNum: HTMLNum });
-};
+}
