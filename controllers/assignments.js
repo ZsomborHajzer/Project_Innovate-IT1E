@@ -38,8 +38,27 @@ exports.getSpecificAssigment = async (req, res) => {
         res.status(404).json({ message: "Question not found" });
     }
 
-    if (req.method === "patch") {
-        req.status(200).json({ "message": "YEET" });
+    if (req.method === "PATCH") {
+        /** Logic to get data, based on that data sent we need to query the correct part of the user document and update it */
+        const topic = req.body.topic; // topic = "PHP" || "JAVA" || "HTML/CSS"
+        const title = req.body.title; // title can be any of the assignements on DB
+        const completed = req.body.completed;
+
+
+        if (topic === "PHP") {
+            const array = await User.distinct("completedPHPAssigments.$", { userId: req.userId })
+            console.log(array);
+            //if we do not find this in the user
+            // await User.findOneAndUpdate({ userId: req.userId }, { $push: { completedPHPAssigments: title } })
+
+        } else if (topic === "JAVA") {
+            await User.findOneAndUpdate({ userId: req.userId }, { $push: { completedJAVAAssigments: title } })
+
+        } else if (topic === "HTML/CSS") {
+            await User.findOneAndUpdate({ userId: req.userId }, { $push: { completedHTMLCSSAssigments: title } })
+        } else {
+            res.status(404).json({ "message": "ayayaya error here" });
+        }
     }
 
 };
