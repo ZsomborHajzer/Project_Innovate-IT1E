@@ -31,12 +31,8 @@ const userSchema = new Schema({
         required: false
     }],
     completedPHPAssigments: [String],
-    completedJAVAAssigments: [{
-        title: String,
-    }],
-    completedHTMLCSSAssigments: [{
-        title: String,
-    }]
+    completedJAVAAssigments: [String],
+    completedHTMLCSSAssigments: [String],
 
 }, { collection: 'Users' });
 

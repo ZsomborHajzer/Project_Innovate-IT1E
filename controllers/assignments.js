@@ -47,7 +47,6 @@ exports.getSpecificAssigment = async (req, res) => {
 
         if (topic === "PHP") {
             const userObj = await User.findOne({ _id: req.userId });
-            console.log(userObj.completedPHPAssigments);
             if (userObj.completedPHPAssigments.includes(title)) {
                 res.status(200).json({ message: "Already completed this assignment" });
                 return;
@@ -58,7 +57,24 @@ exports.getSpecificAssigment = async (req, res) => {
 
 
         } else if (topic === "JAVA") {
+            const userObj = await User.findOne({ _id: req.userId });
+            if (userObj.completedJAVAAssigments.includes(title)) {
+                res.status(200).json({ message: "Already completed this assignment" });
+                return;
+            }
+
+            await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedJAVAAssigments: title } });
+            res.status(200).json({ message: "Assignment completed" });
         } else if (topic === "HTML/CSS") {
+            const userObj = await User.findOne({ _id: req.userId });
+            console.log(userObj.completedHTMLCSSAssigments);
+            if (userObj.completedHTMLCSSAssigments.includes(title)) {
+                res.status(200).json({ message: "Already completed this assignment" });
+                return;
+            }
+
+            await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedHTMLCSSAssigments: title } });
+            res.status(200).json({ message: "Assignment completed" });
         }
     }
 
