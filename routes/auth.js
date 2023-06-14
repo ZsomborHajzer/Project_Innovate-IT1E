@@ -18,7 +18,7 @@ const isAuth = require('../middleware/is-auth');
 
 
 //BackEnd Validation Of Registration
-router.put('/signup', [
+router.post('/signup', [
     body('email')
         .isEmail()
         .withMessage("Please enter a valid email!")
