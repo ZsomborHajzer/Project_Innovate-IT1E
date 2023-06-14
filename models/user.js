@@ -34,6 +34,8 @@ const userSchema = new Schema({
     completedJAVAAssigments: [String],
     completedHTMLCSSAssigments: [String],
 
+    achievementsUnlocked: [String],
+
 }, { collection: 'Users' });
 
 //export
