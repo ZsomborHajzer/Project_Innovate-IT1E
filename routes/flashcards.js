@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-
 //import models
 const User = require('../models/user');
 const { flashcardCollection, flashcardDeck, flashcard } = require('../models/flashcardCollection');
@@ -9,10 +8,8 @@ const { flashcardCollection, flashcardDeck, flashcard } = require('../models/fla
 //import middleware
 const isAuth = require('../middleware/is-auth');
 
-
 //import controllers
 const { getFlashcardsPage, newDeck, updateDeck, deleteDeck, getDeck } = require('../controllers/flashcards');
-
 
 // api routes
 router.get('/', isAuth, getFlashcardsPage);

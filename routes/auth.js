@@ -9,13 +9,8 @@ const User = require('../models/user');
 //import controllers
 const authController = require('../controllers/auth');
 
-
 //import middlewares
 const isAuth = require('../middleware/is-auth');
-
-
-// api routes
-
 
 //BackEnd Validation Of Registration
 router.put('/signup', [
@@ -36,6 +31,5 @@ router.put('/signup', [
 ], authController.signup);
 
 router.post('/login', authController.login);
-
 
 module.exports = router;

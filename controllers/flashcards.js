@@ -2,10 +2,6 @@
 const { validationResult } = require('express-validator');
 const { flashcardCollection, flashcardDeck, flashcard } = require('../models/flashcardCollection');
 
-/**
-* * Get Flashcards Page takes in a token parameter of the collectionId, and returns the decks
- */
-
 exports.getFlashcardsPage = async (req, res) => {
     const collection = await flashcardCollection.findById({ _id: req.collectionId });
     let returnedJson = {};
@@ -25,10 +21,6 @@ exports.getFlashcardsPage = async (req, res) => {
     }
     res.status(201).json(returnedJson);
 };
-
-/**
- * * Get Deck takes in a query parameter of the deckId, and returns the deck with the flashcards
- */
 
 exports.getDeck = async (req, res) => {
 
@@ -66,12 +58,6 @@ exports.getDeck = async (req, res) => {
     }
 };
 
-/**
- * * New Deck takes in a request body that contains the title of the deck, and the flashcards
- * * The flashcards are in the form of an object, where the key is the side1, and the value is the side2
- * * The function creates a new deck, and then creates a new flashcard for each of the key value pairs
- */
-
 exports.newDeck = async (req, res) => {
 
     if (Object.keys(req.body).length === 0) {
@@ -79,6 +65,7 @@ exports.newDeck = async (req, res) => {
     }
 
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
         const error = new Error("Validation Failed.");
         error.statusCode = 422;
@@ -109,16 +96,7 @@ exports.newDeck = async (req, res) => {
     }
 
     return res.status(201).json({ message: `Deck Successfully created`, deckID: deck._id });
-
-
 };
-
-
-/**
- * * Update deck checks the current flashcards, and compares them to the submitted ones. If they exist already, it leaves it alone
- * * If it exists, but was changed, updates the flashcard, and updates the nested flashcard in the deck as well.
- * * If it does not exist, it creates the flashcard then, it inserts it into the deck as a nested document.
- */
 
 exports.updateDeck = async (req, res, next) => {
     let currentFlashcardsArr = [];
@@ -129,6 +107,7 @@ exports.updateDeck = async (req, res, next) => {
 
     //sets the title if it was updated, if it was empty give it automatic name "Title"
     if (!req.body.title.length === 0) {
+
         if (deck.setTitle !== req.body.title) {
             await flashcardDeck.findOneAndUpdate({ _id: deck._id }, { $set: { setTitle: req.body.title } })
         }
@@ -150,16 +129,20 @@ exports.updateDeck = async (req, res, next) => {
 
     // function to compare and replace items that do not match
     for (let i = 0; i < currentFlashcardsArr.length; i++) {
+
         if (currentFlashcardsArr[i] !== newFlashcardsArr[i]) {
             var j = Math.floor(i / 2);
             var flashcardObj = deck.flashcards[j];
             var flashcardID = deck.flashcards[j]._id;
+
             if ((i % 2 === 0)) {
                 let fid = await flashcard.findOneAndUpdate({ _id: flashcardID, deckId: deck._id }, { $set: { side1: newFlashcardsArr[i] } });
+
                 if (!flashcardUpdateIndexId.includes(fid._id)) {
                     flashcardUpdateIndexId.push(fid._id);
                 }
             }
+
             if (i % 2 === 1) {
                 let fid = await flashcard.findOneAndUpdate({ _id: flashcardID, deckId: deck._id }, { $set: { side2: newFlashcardsArr[i] } });
                 if (!flashcardUpdateIndexId.includes(fid._id)) {
@@ -176,8 +159,8 @@ exports.updateDeck = async (req, res, next) => {
     }
 
     //if the user added further flashcards, create them and add them to the deck
-
     if (currentFlashcardsArr.length < newFlashcardsArr.length) {
+
         for (let i = currentFlashcardsArr.length; i < newFlashcardsArr.length; i += 2) {
             const side1 = Object.values(req.body)[i];
             const side2 = Object.values(req.body)[i + 1];
@@ -194,14 +177,11 @@ exports.updateDeck = async (req, res, next) => {
     return res.status(200).json({ "message": "Updated Successfuly" });
 }
 
-/**
- * * Delete Deck takes in a query parameter of the deckId, and deletes the deck and all of its flashcards
- */
-
 exports.deleteDeck = async (req, res, next) => {
     let deckId = req.query.deckId;
     let collectionId = req.collectionId;
     let deck = await flashcardDeck.findOneAndDelete({ _id: deckId });
+
     for (let i = 0; i < deck.flashcards.length; i++) {
         await flashcard.findOneAndDelete({ _id: deck.flashcards[i]._id });
     }
@@ -209,8 +189,3 @@ exports.deleteDeck = async (req, res, next) => {
     res.status(200).json({ "message": "Deleted Successfuly" });
 }
 
-/**
- * 
- * ! Need to figure out if we want to save created flashcards seperately or inside all one nested document
- * 
- */

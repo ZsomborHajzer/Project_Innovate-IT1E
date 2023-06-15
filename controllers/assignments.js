@@ -22,6 +22,7 @@ exports.getSpecificAssigment = async (req, res) => {
         const questionObj = await Assignments.findOne({ topic: topic });
 
         for (let i = 0; i < questionObj.questions.length; i++) {
+
             if (questionObj.questions[i].questionNum === questionNum) {
                 console.log(questionObj.questions[i].question);
                 res.status(200).json({ question: questionObj.questions[i] });
@@ -39,6 +40,7 @@ exports.getSpecificAssigment = async (req, res) => {
         if (topic === "PHP") {
             const userObj = await User.findOne({ _id: req.userId });
             console.log(userObj.completedPHPAssigments);
+
             if (userObj.completedPHPAssigments.includes(title)) {
                 res.status(200).json({ message: "Already completed this assignment" });
                 return;
@@ -46,7 +48,6 @@ exports.getSpecificAssigment = async (req, res) => {
 
             await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedPHPAssigments: title } });
             res.status(200).json({ message: "Assignment completed" });
-
 
         } else if (topic === "JAVA") {
             const userObj = await User.findOne({ _id: req.userId });
@@ -57,9 +58,11 @@ exports.getSpecificAssigment = async (req, res) => {
 
             await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedJAVAAssigments: title } });
             res.status(200).json({ message: "Assignment completed" });
+
         } else if (topic === "HTML/CSS") {
             const userObj = await User.findOne({ _id: req.userId });
             console.log(userObj.completedHTMLCSSAssigments);
+
             if (userObj.completedHTMLCSSAssigments.includes(title)) {
                 res.status(200).json({ message: "Already completed this assignment" });
                 return;
