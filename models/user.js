@@ -29,7 +29,12 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Comment',
         required: false
-    }]
+    }],
+    completedPHPAssigments: [String],
+    completedJAVAAssigments: [String],
+    completedHTMLCSSAssigments: [String],
+
+    achievementsUnlocked: [String]
 }, { collection: 'Users' });
 
 //export
