@@ -4,11 +4,13 @@ const { db } = require('../models/user');
 const router = express.Router();
 
 //import DB 
+const User = require('../models/user');
 const Assignments = db.collection('Assignments')
 
 exports.getAssigment = async (req, res) => {
-    const chosenTopic = req.query.topic;
+    const chosenTopic = req.body.topic;
     const assignmentObj = await Assignments.findOne({ topic: chosenTopic });
+    console.log(assignmentObj.questions);
     res.status(200).json({ assignments: assignmentObj.questions });
 };
 
@@ -36,6 +38,7 @@ exports.getSpecificAssigment = async (req, res) => {
 
         if (topic === "PHP") {
             const userObj = await User.findOne({ _id: req.userId });
+            console.log(userObj.completedPHPAssigments);
             if (userObj.completedPHPAssigments.includes(title)) {
                 res.status(200).json({ message: "Already completed this assignment" });
                 return;
@@ -69,6 +72,7 @@ exports.getSpecificAssigment = async (req, res) => {
     }
 
 };
+
 exports.getNumberOfQuestions = async (req, res) => {
     const PHPObj = await Assignments.findOne({ topic: "PHP" });
     const JAVAObj = await Assignments.findOne({ topic: "JAVA" });
@@ -79,4 +83,4 @@ exports.getNumberOfQuestions = async (req, res) => {
     const HTMLNum = HTMLObj.questions.length;
 
     res.status(200).json({ PHPNum: PHPNum, JAVANum: JAVANum, HTMLNum: HTMLNum });
-};
+}
