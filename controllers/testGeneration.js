@@ -10,9 +10,9 @@ let openai;
  */
 
 exports.getTestGenerationPage = async (req, res) => {
-    const topic = req.body.topic;
-    const difficulty = req.body.difficulty;
-    const numberOfQuestions = req.body.numberOfQuestions;
+    const topic = req.query.topic;
+    const difficulty = req.query.difficulty;
+    const numberOfQuestions = req.query.numberOfQuestions;
 
     const prompt = ` Write a multiple-choice test about ${topic} with ${numberOfQuestions} questions in JSON format. Difficulty should be ${difficulty}, order the possible answers with letters a, b, c, d. Also send the correct answer seperately. The format of the response should be the following: 
     [{

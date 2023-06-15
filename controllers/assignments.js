@@ -7,20 +7,18 @@ const router = express.Router();
 const Assignments = db.collection('Assignments')
 
 exports.getAssigment = async (req, res) => {
-    const chosenTopic = req.body.topic;
+    const chosenTopic = req.query.topic;
     const assignmentObj = await Assignments.findOne({ topic: chosenTopic });
-    console.log(assignmentObj.questions);
     res.status(200).json({ assignments: assignmentObj.questions });
 };
 
 exports.getSpecificAssigment = async (req, res) => {
-    const topic = req.body.topic;
-    const questionNum = req.body.questionNum;
+    const topic = req.query.topic;
+    const questionNum = req.query.questionNum;
     const questionObj = await Assignments.findOne({ topic: topic });
 
     for (let i = 0; i < questionObj.questions.length; i++) {
         if (questionObj.questions[i].questionNum === questionNum) {
-            console.log(questionObj.questions[i].question);
             res.status(200).json({ question: questionObj.questions[i] });
             return;
         }
