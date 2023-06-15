@@ -21,10 +21,10 @@ router.get('/getPost', isAuth, getPost);
 router.patch('/getPost', isAuth, getPost);
 
 //create a new post
-router.put('/newPost', isAuth, newPost);
+router.post('/newPost', isAuth, newPost);
 
 //create a new comment
-router.put('/newComment', isAuth, newComment);
+router.post('/newComment', isAuth, newComment);
 
 //export router
 module.exports = router;

@@ -24,10 +24,10 @@ router.get('/getDeck', isAuth, getDeck)
 router.delete('/getDeck', isAuth, getDeck)
 
 //Create a new deck with flashcards
-router.put('/newDeck', isAuth, newDeck);
+router.post('/newDeck', isAuth, newDeck);
 
 //Update an existing deck
-router.patch('/updateDeck', isAuth, updateDeck)
+router.put('/updateDeck', isAuth, updateDeck)
 
 //Delete a deck and its flashcards
 router.delete('/deleteDeck', isAuth, deleteDeck)
