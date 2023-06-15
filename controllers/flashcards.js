@@ -45,9 +45,9 @@ exports.getDeck = async (req, res) => {
         }
 
         for (let i = 0; i < deck.flashcards.length; i++) {
-            let side1Key = `side1__${i}`;
+            let side1Key = `side1_${i}`;
             let side1Value = deck.flashcards[i].side1;
-            let side2Key = `side2__${i}`;
+            let side2Key = `side2_${i}`;
             let side2Value = deck.flashcards[i].side2;
             let flashcardIdKey = "flashcardId" + i;
             let flashcardIdValue = deck.flashcards[i]._id;
