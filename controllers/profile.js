@@ -9,7 +9,6 @@ exports.getProfilePage = async (req, res) => {
     const lastName = req.lastName;
     const email = req.email;
     res.status(201).json({ firstName: firstName, lastName: lastName, email: email });
-
 };
 
 exports.patchPassword = async (req, res) => {

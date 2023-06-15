@@ -11,7 +11,6 @@ exports.getFlashcardsPage = async (req, res) => {
     }
 
     for (let i = 0; i < collection.decks.length; i++) {
-        console.log(collection.decks[i].setTitle);
         let deckKey = "setTitle" + i;
         let newValue = collection.decks[i].setTitle;
         let deckIdKey = "deckId" + i;

@@ -7,8 +7,6 @@ const isAuth = require('../middleware/is-auth');
 //import controllers
 const { getForumPage, getPost, newPost, newComment } = require('../controllers/forum');
 
-// api routes
-
 //main forum page
 router.get('/', isAuth, getForumPage);
 

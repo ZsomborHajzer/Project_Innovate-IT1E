@@ -10,7 +10,6 @@ const Assignments = db.collection('Assignments')
 exports.getAssigment = async (req, res) => {
     const chosenTopic = req.body.topic;
     const assignmentObj = await Assignments.findOne({ topic: chosenTopic });
-    console.log(assignmentObj.questions);
     res.status(200).json({ assignments: assignmentObj.questions });
 };
 
@@ -24,7 +23,6 @@ exports.getSpecificAssigment = async (req, res) => {
         for (let i = 0; i < questionObj.questions.length; i++) {
 
             if (questionObj.questions[i].questionNum === questionNum) {
-                console.log(questionObj.questions[i].question);
                 res.status(200).json({ question: questionObj.questions[i] });
                 return;
             }
@@ -39,7 +37,6 @@ exports.getSpecificAssigment = async (req, res) => {
 
         if (topic === "PHP") {
             const userObj = await User.findOne({ _id: req.userId });
-            console.log(userObj.completedPHPAssigments);
 
             if (userObj.completedPHPAssigments.includes(title)) {
                 res.status(200).json({ message: "Already completed this assignment" });
@@ -61,7 +58,6 @@ exports.getSpecificAssigment = async (req, res) => {
 
         } else if (topic === "HTML/CSS") {
             const userObj = await User.findOne({ _id: req.userId });
-            console.log(userObj.completedHTMLCSSAssigments);
 
             if (userObj.completedHTMLCSSAssigments.includes(title)) {
                 res.status(200).json({ message: "Already completed this assignment" });
