@@ -5,10 +5,6 @@ require("dotenv").config();
 //openai variable
 let openai;
 
-/**
-     * TODO: TEST GENERATION HERE
- */
-
 exports.getTestGenerationPage = async (req, res) => {
     const topic = req.query.topic;
     const difficulty = req.query.difficulty;
