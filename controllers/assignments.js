@@ -13,19 +13,62 @@ exports.getAssigment = async (req, res) => {
 };
 
 exports.getSpecificAssigment = async (req, res) => {
-    const topic = req.query.topic;
-    const questionNum = req.query.questionNum;
-    const questionObj = await Assignments.findOne({ topic: topic });
 
-    for (let i = 0; i < questionObj.questions.length; i++) {
-        if (questionObj.questions[i].questionNum === questionNum) {
-            res.status(200).json({ question: questionObj.questions[i] });
-            return;
+    if (req.method === "GET") {
+        const topic = req.body.topic;
+        const questionNum = req.body.questionNum;
+        const questionObj = await Assignments.findOne({ topic: topic });
+
+        for (let i = 0; i < questionObj.questions.length; i++) {
+            if (questionObj.questions[i].questionNum === questionNum) {
+                console.log(questionObj.questions[i].question);
+                res.status(200).json({ question: questionObj.questions[i] });
+                return;
+            }
         }
+        res.status(404).json({ message: "Question not found" });
     }
-    res.status(404).json({ message: "Question not found" });
-};
 
+    if (req.method === "PATCH") {
+        const topic = req.body.topic;
+        const title = req.body.title;
+        const completed = req.body.completed;
+
+        if (topic === "PHP") {
+            const userObj = await User.findOne({ _id: req.userId });
+            if (userObj.completedPHPAssigments.includes(title)) {
+                res.status(200).json({ message: "Already completed this assignment" });
+                return;
+            }
+
+            await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedPHPAssigments: title } });
+            res.status(200).json({ message: "Assignment completed" });
+
+
+        } else if (topic === "JAVA") {
+            const userObj = await User.findOne({ _id: req.userId });
+            if (userObj.completedJAVAAssigments.includes(title)) {
+                res.status(200).json({ message: "Already completed this assignment" });
+                return;
+            }
+
+            await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedJAVAAssigments: title } });
+            res.status(200).json({ message: "Assignment completed" });
+        } else if (topic === "HTML/CSS") {
+            const userObj = await User.findOne({ _id: req.userId });
+            console.log(userObj.completedHTMLCSSAssigments);
+            if (userObj.completedHTMLCSSAssigments.includes(title)) {
+                res.status(200).json({ message: "Already completed this assignment" });
+                return;
+            }
+
+            await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedHTMLCSSAssigments: title } });
+            res.status(200).json({ message: "Assignment completed" });
+        }
+        res.status(404).json({ message: "Assignment not found" });
+    }
+
+};
 exports.getNumberOfQuestions = async (req, res) => {
     const PHPObj = await Assignments.findOne({ topic: "PHP" });
     const JAVAObj = await Assignments.findOne({ topic: "JAVA" });
