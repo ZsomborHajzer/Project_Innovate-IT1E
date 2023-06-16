@@ -13,10 +13,10 @@ const authController = require('../controllers/auth');
 const isAuth = require('../middleware/is-auth');
 
 //BackEnd Validation Of Registration
-router.put('/signup', [
+router.post('/signup', [
     body('email')
         .isEmail()
-        .withMessage("Please enter a valid email!")
+        .withMessage()
         .custom((value, { req }) => {
             return User.findOne({ email: value }).then(userDoc => {
                 if (userDoc) {
