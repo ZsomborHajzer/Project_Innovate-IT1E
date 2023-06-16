@@ -7,21 +7,21 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { flashcardCollection, flashcardDeck, flashcard } = require('../models/flashcardCollection');
 
-
 exports.getSignUp = async (req, res) => {
     res.status(200).json({
         message: 'Sign Up page is working',
     })
 };
 
-// get info from body + error validate + create new user + passwordhash + store in database
 exports.signup = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         const error = new Error("Validation Failed.");
         error.statusCode = 422;
         error.data = errors.array();
+        res.status(422).json({ field: errors.array()[0].path, errors: errors.array()[0].msg });
         throw error;
+
     }
     const email = req.body.email;
     const password = req.body.password;
@@ -52,14 +52,11 @@ exports.signup = (req, res, next) => {
         });
 };
 
-//Request email, password -> find user with email -> if no user throw error -> get password -> decrypt and compare -> if false throw error -> if true generate JWT token
-//JWT secret == JWTSECRETKEY , Expires in 1 hour
 exports.login = async (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     let loadedUser;
     let loadedFlashcardCollection;
-
 
     User.findOne({ email: email }).then(user => {
         if (!user) {
@@ -77,7 +74,6 @@ exports.login = async (req, res, next) => {
                 throw error;
             }
             loadedFlashcardCollection = await getCollectionId(loadedUser._id);
-            //Error caused by trying to insert flashcardID into  JWT token and not being able to get a respons
             const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString(), collectionId: loadedFlashcardCollection.toString(), firstName: loadedUser.firstName, lastName: loadedUser.lastName, email: loadedUser.email }, 'JWTSECRETTOKEN', { expiresIn: '2h' });
             res.status(200).json({ token: token })
         })

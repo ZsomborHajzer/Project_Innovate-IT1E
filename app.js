@@ -6,10 +6,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 require("dotenv").config();
-const fs = require('fs');
-const path = require('path');
 const helmet = require('helmet');
-
 
 // app
 const app = express();
@@ -26,10 +23,8 @@ app.use(morgan("dev"));
 app.use(cors({ origin: true, credentrials: true }));
 app.use(bodyParser.json());
 
-
 //error handeling
 app.use((error, req, res, next) => {
-    console.log(error);
     const status = error.statusCode || 500;
     const message = error.message;
     const data = error.data;
@@ -43,9 +38,6 @@ app.use("/", indexRoutes);
 const authRoutes = require('./routes/auth.js');
 app.use("/auth", authRoutes);
 
-const homePageRoutes = require("./routes/homePage.js");
-app.use("/homepage", homePageRoutes);
-
 const assigmentsRouter = require("./routes/assignments.js");
 app.use("/assignments", assigmentsRouter);
 
@@ -53,11 +45,7 @@ const flashcardsRouter = require("./routes/flashcards.js");
 app.use("/flashcards", flashcardsRouter);
 
 const profilePageRouter = require("./routes/profile.js");
-const { Router } = require("express");
 app.use("/profile", profilePageRouter);
-
-const testingRouter = require("./routes/testing.js");
-app.use("/testing", testingRouter);
 
 const forumRouter = require("./routes/forum.js");
 app.use("/forum", forumRouter);

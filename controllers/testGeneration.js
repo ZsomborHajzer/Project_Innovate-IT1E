@@ -5,10 +5,6 @@ require("dotenv").config();
 //openai variable
 let openai;
 
-/**
-     * TODO: TEST GENERATION HERE
- */
-
 exports.getTestGenerationPage = async (req, res) => {
     const topic = req.query.topic;
     const difficulty = req.query.difficulty;
@@ -22,8 +18,6 @@ exports.getTestGenerationPage = async (req, res) => {
     }...]
     
     The response should not include any new line characters and should be compaitable with the JSON.parse() function.`;
-
-    console.log(process.env.OPENAI_API_KEY);
 
     if (process.env.OPENAI_API_KEY) {
         const configuration = new Configuration({ apiKey: process.env.OPENAI_API_KEY });
@@ -40,12 +34,5 @@ exports.getTestGenerationPage = async (req, res) => {
         res.status(200).json({ response: JSON.parse(response.data.choices[0].text) });
     } catch (err) {
         res.status(500).json({ error: err });
-        console.log(err);
     }
 };
-
-
-
-/*exports.postTestGenerationPage = async (req, res) => {
-
-};*/

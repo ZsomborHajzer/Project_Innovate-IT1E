@@ -1,15 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-//import models
-
 //import middleware
 const isAuth = require('../middleware/is-auth');
 
 //import controllers
 const { getForumPage, getPost, newPost, newComment } = require('../controllers/forum');
-
-// api routes
 
 //main forum page
 router.get('/', isAuth, getForumPage);
