@@ -3,14 +3,17 @@ const router = express.Router();
 
 
 //import controllers
-const { getAchievements } = require('../controllers/achievements');
+const { getAllAchievements, getunlockedAchievement, unlockAchievements } = require('../controllers/achievements');
 
 //import middlewares
 const isAuth = require('../middleware/is-auth');
 
 
 // api routes
-router.get('/', isAuth, getAchievements);
+router.get('/', isAuth, getAllAchievements);
 
+router.get('/unlockedAchievement', isAuth, getunlockedAchievement);
+
+router.get('/unlockAchievements', isAuth, unlockAchievements);
 
 module.exports = router;

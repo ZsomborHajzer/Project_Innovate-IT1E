@@ -3,39 +3,31 @@ const express = require('express');
 const router = express.Router();
 const {db} = require("../models/user");
 const User = require('../models/user');
+
 const Achievements = db.collection('Achievements');
 
+
 // Based on the user's progress, achievements are unlocked
-exports.getAchievements = async (req, res) => {
-    const userObj = await User.findOne({ _id: req.userId });
-    const achievementsUnlocked = userObj.achievementsUnlocked;
-    
 
-    console.log(allAchievements.toArray());
-    res.status(200).json({ "achievementsUnlocked": achievementsUnlocked });
-    if (userObj.completedPHPAssigments.length === 1) {  
-        await User.findOneAndUpdate({ _id: req.userId }, { $push: { achievementsUnlocked: phpAchievement } });
-      } else if(userObj.completedJAVAssigments.length === 1){
-        await User.findOneAndUpdate({ _id: req.userId }, { $push: { achievementsUnlocked: javaAchievement } });
-      } else if(userObj.completedHTMLCSSAssigments.length === 1){
-        await User.findOneAndUpdate({ _id: req.userId }, { $push: { achievementsUnlocked: htmlAchievement } });
-      } else
+exports.getAllAchievements = async (req, res) => {
 
-
-    if(achievementsUnlocked.length === 0){
-        res.status(204).json({message: "No achievements unlocked"});
-        return;
-    }
+    const achievementObj = await Achievements.find().toArray();
+    console.log(achievementObj);
+    res.status(200).json({ Achievements : achievementObj });
 }
 
-    exports.checkAchievement = async (req, res) => {
+exports.getunlockedAchievement = async (req, res) => {
+    const userObj = await User.findOne({ _id: req.userId });
+    const achievementsUnlocked = userObj.achievementsUnlocked;
 
-    const phpAchievement = await Achievements.findOne({topic: "PHP1"});
-    const javaAchievement = await Achievements.findOne({topic: "JAVA1"});
-    const htmlAchievement = await Achievements.findOne({topic: "HTML/CSS1"});
+    res.status(200).json({ "achievementsUnlocked": achievementsUnlocked });
+}
 
-    if(userObj.achievementsUnlocked.includes(phpAchievement)){
-        res.status(200).json({message: "Achievement already unlocked"});
-        return;
-    }
+exports.unlockAchievements = async (req, res) => {
+    const userObj = await User.findOne({ _id: req.userId });
+    const achievementObj = await Achievements.find().toArray();
+    const userAssigments = await User.find({}, { projection: {_id: req.userId, completedPHPAssigments: "PHP1"}});
+    console.log(userAssigments);
+    res.status(200).json({"PHP Assigments" : userAssigments});
+    // Add title from achievement collection to achievementUnlocked array
 }
