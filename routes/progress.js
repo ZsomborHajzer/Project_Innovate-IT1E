@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 //import controllers
-const { getProgress } = require('../controllers/progress.js');
-
+console.log('Hey HEY HEY');
+const { getProgress } = require('../controllers/progress');
+console.log('AYAYAYAYA');
 //import middlewares
 const isAuth = require('../middleware/is-auth');
 
