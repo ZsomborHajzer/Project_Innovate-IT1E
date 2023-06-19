@@ -60,8 +60,9 @@ exports.login = async (req, res, next) => {
 
     User.findOne({ email: email }).then(user => {
         if (!user) {
-            const error = new Error('A user with this email does not exist');
+            const error = new Error('A user with this credentials does not exist.');
             error.statusCode = 401;
+            res.status(401).json({ message: error.message });
             throw error;
         }
         loadedUser = user;
@@ -69,8 +70,9 @@ exports.login = async (req, res, next) => {
     })
         .then(async (isEqual) => {
             if (!isEqual) {
-                const error = new Error("Wrong Password");
+                const error = new Error("A user with this credentials does not exist.");
                 error.statusCode = 401;
+                res.status(401).json({ message: error.message });
                 throw error;
             }
             loadedFlashcardCollection = await getCollectionId(loadedUser._id);
