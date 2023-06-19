@@ -5,12 +5,13 @@ const router = express.Router();
 
 //import DB 
 const User = require('../models/user');
+const user = require('../models/user');
 const Assignments = db.collection('Assignments')
+const Achievements = db.collection('Achievements');
 
 exports.getAssigment = async (req, res) => {
     const chosenTopic = req.body.topic;
     const assignmentObj = await Assignments.findOne({ topic: chosenTopic });
-    console.log(assignmentObj.questions);
     res.status(200).json({ assignments: assignmentObj.questions });
 };
 
@@ -37,39 +38,53 @@ exports.getSpecificAssigment = async (req, res) => {
         const completed = req.body.completed;
 
         if (topic === "PHP") {
+            const achievementObj = await Achievements.findOne({"Topic" : title});
+            console.log(achievementObj);
             const userObj = await User.findOne({ _id: req.userId });
-            if (userObj.completedPHPAssigments.includes(title)) {
-                res.status(200).json({ message: "Already completed this assignment" });
+            if (userObj.completedPHPAssigments.includes(title) && userObj.achievementsUnlocked.includes(achievementObj.title)) {
+                res.status(200).json({ message: "Already completed this assignment and unlocked achievement" });
                 return;
             }
-
-            await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedPHPAssigments: title } });
-            res.status(200).json({ message: "Assignment completed" });
+            if (title === achievementObj.Topic) {
+                await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedPHPAssigments: title } });
+                await User.findOneAndUpdate({ _id: req.userId }, { $push: { achievementsUnlocked : achievementObj.title } });
+                res.status(200).json({ message: "Assignment completed and achievement unlocked" });
+            }
+            
 
 
         } else if (topic === "JAVA") {
+            const achievementObj = await Achievements.findOne({"Topic" : title});
             const userObj = await User.findOne({ _id: req.userId });
-            if (userObj.completedJAVAAssigments.includes(title)) {
-                res.status(200).json({ message: "Already completed this assignment" });
+            if (userObj.completedJAVAAssigments.includes(title) && userObj.achievementsUnlocked.includes(achievementObj.title)) {
+                res.status(200).json({ message: "Already completed this assignment and achievement unlocked" });
                 return;
             }
-
-            await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedJAVAAssigments: title } });
-            res.status(200).json({ message: "Assignment completed" });
+            if (title === achievementObj.Topic) {
+                await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedJAVAAssigments: title } });
+                await User.findOneAndUpdate({ _id: req.userId }, { $push: { achievementsUnlocked : achievementObj.title } });
+                res.status(200).json({ message: "Assignment completed and achievement unlocked" });
+            }
+            
         } else if (topic === "HTML/CSS") {
+            
+            const achievementObj = await Achievements.findOne({"Topic" : title});
             const userObj = await User.findOne({ _id: req.userId });
             console.log(userObj.completedHTMLCSSAssigments);
             if (userObj.completedHTMLCSSAssigments.includes(title)) {
                 res.status(200).json({ message: "Already completed this assignment" });
                 return;
             }
-
-            await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedHTMLCSSAssigments: title } });
-            res.status(200).json({ message: "Assignment completed" });
+            if(title === achievementObj.Topic){
+                await User.findOneAndUpdate({ _id: req.userId }, { $push: { achievementsUnlocked: achievementObj.title } });
+                await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedHTMLCSSAssigments: title } });
+                res.status(200).json({ message: "Assignment completed and achievement unlocked" });
+            }
+        } else {
+            res.status(404).json({ message: "Assignment not found" });
         }
-        res.status(404).json({ message: "Assignment not found" });
-    }
 
+    }
 };
 
 exports.getNumberOfQuestions = async (req, res) => {

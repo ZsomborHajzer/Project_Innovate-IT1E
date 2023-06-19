@@ -14,6 +14,4 @@ router.get('/', isAuth, getAllAchievements);
 
 router.get('/unlockedAchievement', isAuth, getunlockedAchievement);
 
-router.get('/unlockAchievements', isAuth, unlockAchievements);
-
 module.exports = router;
