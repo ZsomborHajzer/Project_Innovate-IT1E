@@ -8,7 +8,7 @@ const User = require('../models/user');
 const Assignments = db.collection('Assignments')
 
 exports.getAssigment = async (req, res) => {
-    const chosenTopic = req.body.topic;
+    const chosenTopic = req.query.topic;
     const assignmentObj = await Assignments.findOne({ topic: chosenTopic });
     res.status(200).json({ assignments: assignmentObj.questions });
 };
@@ -16,8 +16,8 @@ exports.getAssigment = async (req, res) => {
 exports.getSpecificAssigment = async (req, res) => {
 
     if (req.method === "GET") {
-        const topic = req.body.topic;
-        const questionNum = req.body.questionNum;
+        const topic = req.query.topic;
+        const questionNum = req.query.questionNum;
         const questionObj = await Assignments.findOne({ topic: topic });
 
         for (let i = 0; i < questionObj.questions.length; i++) {
