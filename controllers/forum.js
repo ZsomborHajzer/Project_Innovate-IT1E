@@ -6,6 +6,7 @@ const User = require('../models/user');
 
 exports.getForumPage = async (req, res) => {
     const questions = await Question.find();
+    if (questions === null) return res.status(404).json({ message: "No Questions exist" });
     res.status(200).json({ questions: questions });
 };
 
@@ -17,6 +18,7 @@ exports.getPost = async (req, res) => {
         const question = await Question.findById(questionId);
         if (question === null) return res.status(422).json({ message: "No Question in existence" });
         const comments = await Comment.find({ questionId: questionId });
+        if (comments === null) comments = [];
         res.status(200).json({ question: question, comments: comments });
 
     } else if (req.method === "PATCH") {
@@ -57,26 +59,31 @@ exports.getPost = async (req, res) => {
 
 exports.newPost = async (req, res) => {
     const errors = validationResult(req);
-
     if (!errors.isEmpty()) {
         return res.status(422).json({ message: "Invalid Input" });
     }
-    const title = req.body.title;
-    const question = req.body.question;
-    const firstName = req.firstName;
-    const lastName = req.lastName;
-    const userId = req.userId;
-    const tag = req.body.tag;
-    const newQuestion = new Question({
-        title: title,
-        question: question,
-        firstName: firstName,
-        lastName: lastName,
-        userId: userId,
-        tag: tag
-    });
-    await newQuestion.save();
-    res.status(201).json({ message: "Question Created" });
+    try {
+
+        const title = req.body.title;
+        const question = req.body.question;
+        const firstName = req.firstName;
+        const lastName = req.lastName;
+        const userId = req.userId;
+        const tag = req.body.tag;
+        const newQuestion = new Question({
+            title: title,
+            question: question,
+            firstName: firstName,
+            lastName: lastName,
+            userId: userId,
+            tag: tag
+        });
+        await newQuestion.save();
+        res.status(201).json({ message: "Question Created" });
+    } catch (err) {
+        res.status(500).json({ message: "Server Error" });
+    }
+
 };
 
 exports.newComment = async (req, res) => {
@@ -85,19 +92,23 @@ exports.newComment = async (req, res) => {
     if (!errors.isEmpty()) {
         return res.status(422).json({ message: "Invalid Input" });
     }
-    const comment = req.body.comment;
-    const questionId = req.body.questionId;
-    const userId = req.userId;
-    const fisrtName = req.firstName;
-    const lastName = req.lastName;
-    const newComment = new Comment({
-        comment: comment,
-        firstName: fisrtName,
-        lastName: lastName,
-        questionId: questionId,
-        userId: userId
-    });
-    await newComment.save();
-    await Question.findOneAndUpdate({ _id: questionId }, { $push: { comments: newComment._id } });
-    res.status(201).json({ message: "Comment Created" });
+    try {
+        const comment = req.body.comment;
+        const questionId = req.body.questionId;
+        const userId = req.userId;
+        const fisrtName = req.firstName;
+        const lastName = req.lastName;
+        const newComment = new Comment({
+            comment: comment,
+            firstName: fisrtName,
+            lastName: lastName,
+            questionId: questionId,
+            userId: userId
+        });
+        await newComment.save();
+        await Question.findOneAndUpdate({ _id: questionId }, { $push: { comments: newComment._id } });
+        res.status(201).json({ message: "Comment Created" });
+    } catch (err) {
+        res.status(500).json({ message: "Server Error" });
+    }
 };

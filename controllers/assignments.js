@@ -20,6 +20,7 @@ exports.getSpecificAssigment = async (req, res) => {
         const topic = req.query.topic;
         const questionNum = req.query.questionNum;
         const questionObj = await Assignments.findOne({ topic: topic });
+        if (questionObj === null) return res.status(404).json({ message: "Question not found" });
 
         for (let i = 0; i < questionObj.questions.length; i++) {
 
@@ -38,6 +39,7 @@ exports.getSpecificAssigment = async (req, res) => {
 
         if (topic === "PHP") {
             const userObj = await User.findOne({ _id: req.userId });
+            if (userObj === null) return res.status(404).json({ message: "User not found" });
 
             if (userObj.completedPHPAssigments.includes(title)) {
                 res.status(200).json({ message: "Already completed this assignment" });
@@ -77,6 +79,7 @@ exports.getNumberOfQuestions = async (req, res) => {
     const PHPObj = await Assignments.findOne({ topic: "PHP" });
     const JAVAObj = await Assignments.findOne({ topic: "JAVA" });
     const HTMLObj = await Assignments.findOne({ topic: "HTML/CSS" });
+    if (PHPObj === null || JAVAObj === null || HTMLObj === null) return res.status(404).json({ message: "Something went wrong" });
 
     const PHPNum = PHPObj.questions.length;
     const JAVANum = JAVAObj.questions.length;

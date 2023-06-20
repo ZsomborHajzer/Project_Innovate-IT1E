@@ -9,6 +9,7 @@ const Assignements = db.collection('Assignments');
 
 exports.getProgress = async (req, res) => {
     const userObj = await User.findOne({ _id: req.userId });
+    if (userObj === null) return res.status(404).json({ message: "User not found" });
     console.log(userObj);
 
     const PHPcompleted = userObj.completedPHPAssigments.length;
@@ -18,6 +19,8 @@ exports.getProgress = async (req, res) => {
     const PHPavailable = await Assignements.findOne({ topic: "PHP" });
     const JAVAavailable = await Assignements.findOne({ topic: "JAVA" });
     const HTMLavailable = await Assignements.findOne({ topic: "HTML/CSS" });
+
+    if (PHPavailable === null || JAVAavailable === null || HTMLavailable === null) return res.status(404).json({ message: "Assignments not found" });
 
     PHPAvailableQuestions = PHPavailable.questions.length;
     JAVAAvailableQuestions = JAVAavailable.questions.length;
