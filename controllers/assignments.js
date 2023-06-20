@@ -10,6 +10,7 @@ const Assignments = db.collection('Assignments')
 exports.getAssigment = async (req, res) => {
     const chosenTopic = req.query.topic;
     const assignmentObj = await Assignments.findOne({ topic: chosenTopic });
+    if (assignmentObj === null) return res.status(404).json({ message: "Assignment not found" });
     res.status(200).json({ assignments: assignmentObj.questions });
 };
 
