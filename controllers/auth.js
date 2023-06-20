@@ -62,7 +62,7 @@ exports.login = async (req, res, next) => {
         if (!user) {
             const error = new Error('A user with this credentials does not exist.');
             error.statusCode = 401;
-            res.status(401).json({ message: error.message });
+            res.status(401).json({ errors: error.message });
             throw error;
         }
         loadedUser = user;
@@ -72,7 +72,7 @@ exports.login = async (req, res, next) => {
             if (!isEqual) {
                 const error = new Error("A user with this credentials does not exist.");
                 error.statusCode = 401;
-                res.status(401).json({ message: error.message });
+                res.status(401).json({ errors: error.message });
                 throw error;
             }
             loadedFlashcardCollection = await getCollectionId(loadedUser._id);
