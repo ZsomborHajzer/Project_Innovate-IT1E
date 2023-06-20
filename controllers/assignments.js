@@ -12,6 +12,7 @@ const Achievements = db.collection('Achievements');
 exports.getAssigment = async (req, res) => {
     const chosenTopic = req.body.topic;
     const assignmentObj = await Assignments.findOne({ topic: chosenTopic });
+    console.log(assignmentObj.questions);
     res.status(200).json({ assignments: assignmentObj.questions });
 };
 
@@ -41,30 +42,51 @@ exports.getSpecificAssigment = async (req, res) => {
             const achievementObj = await Achievements.findOne({"Topic" : title});
             console.log(achievementObj);
             const userObj = await User.findOne({ _id: req.userId });
-            if (userObj.completedPHPAssigments.includes(title) && userObj.achievementsUnlocked.includes(achievementObj.title)) {
-                res.status(200).json({ message: "Already completed this assignment and unlocked achievement" });
+            if (userObj.completedPHPAssigments.includes(title)) {
+                if(achievementObj !== null && userObj.achievementsUnlocked.includes(achievementObj.title)){
+                    res.status(200).json({ message: "Already completed this assignment and achievement unlocked" });
+                    return;
+                } else {
+                    res.status(200).json({ message: "Already completed this assignment" });
+                    return;
+                }
+            } else if(achievementObj === null){
+                await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedPHPAssigments: title } });
+                res.status(200).json({ message: "Assignment completed" });
                 return;
             }
-            if (title === achievementObj.Topic) {
+            else if (title === achievementObj.Topic) {
+                console.log(achievementObj);
                 await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedPHPAssigments: title } });
                 await User.findOneAndUpdate({ _id: req.userId }, { $push: { achievementsUnlocked : achievementObj.title } });
                 res.status(200).json({ message: "Assignment completed and achievement unlocked" });
-            }
+            } 
             
-
 
         } else if (topic === "JAVA") {
             const achievementObj = await Achievements.findOne({"Topic" : title});
             const userObj = await User.findOne({ _id: req.userId });
-            if (userObj.completedJAVAAssigments.includes(title) && userObj.achievementsUnlocked.includes(achievementObj.title)) {
-                res.status(200).json({ message: "Already completed this assignment and achievement unlocked" });
+            if (userObj.completedJAVAAssigments.includes(title)) {
+                if(achievementObj !== null && userObj.achievementsUnlocked.includes(achievementObj.title)){
+                    res.status(200).json({ message: "Already completed this assignment and achievement unlocked" });
+                    return;
+                } else {
+                    res.status(200).json({ message: "Already completed this assignment" });
+                    return;
+                }
+
+            } else if(achievementObj === null){
+                await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedJAVAAssigments: title } });
+                res.status(200).json({ message: "Assignment completed" });
                 return;
             }
-            if (title === achievementObj.Topic) {
+            else if (title === achievementObj.Topic) {
+                console.log(achievementObj);
                 await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedJAVAAssigments: title } });
                 await User.findOneAndUpdate({ _id: req.userId }, { $push: { achievementsUnlocked : achievementObj.title } });
                 res.status(200).json({ message: "Assignment completed and achievement unlocked" });
-            }
+                return;
+            } 
             
         } else if (topic === "HTML/CSS") {
             
@@ -72,18 +94,29 @@ exports.getSpecificAssigment = async (req, res) => {
             const userObj = await User.findOne({ _id: req.userId });
             console.log(userObj.completedHTMLCSSAssigments);
             if (userObj.completedHTMLCSSAssigments.includes(title)) {
-                res.status(200).json({ message: "Already completed this assignment" });
+                if(achievementObj !== null && userObj.achievementsUnlocked.includes(achievementObj.title)){
+                    res.status(200).json({ message: "Already completed this assignment and achievement unlocked" });
+                    return;
+                } else {
+                    res.status(200).json({ message: "Already completed this assignment" });
+                    return;
+                }
+            } else if(achievementObj === null){
+                await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedHTMLCSSAssigments: title } });
+                res.status(200).json({ message: "Assignment completed" });
                 return;
             }
-            if(title === achievementObj.Topic){
-                await User.findOneAndUpdate({ _id: req.userId }, { $push: { achievementsUnlocked: achievementObj.title } });
+            else if (title === achievementObj.Topic) {
+                console.log(achievementObj);
                 await User.findOneAndUpdate({ _id: req.userId }, { $push: { completedHTMLCSSAssigments: title } });
+                await User.findOneAndUpdate({ _id: req.userId }, { $push: { achievementsUnlocked : achievementObj.title } });
                 res.status(200).json({ message: "Assignment completed and achievement unlocked" });
-            }
-        } else {
-            res.status(404).json({ message: "Assignment not found" });
+                return;
+            } 
         }
 
+    } else {
+        res.status(404).json({ message: "Assignment not found" });
     }
 };
 
