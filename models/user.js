@@ -33,7 +33,6 @@ const userSchema = new Schema({
     completedPHPAssigments: [String],
     completedJAVAAssigments: [String],
     completedHTMLCSSAssigments: [String],
-
     achievementsUnlocked: [String]
 }, { collection: 'Users' });
 
