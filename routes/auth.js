@@ -9,23 +9,17 @@ const User = require('../models/user');
 //import controllers
 const authController = require('../controllers/auth');
 
-
 //import middlewares
 const isAuth = require('../middleware/is-auth');
 
-
-// api routes
-
-
 //BackEnd Validation Of Registration
-router.put('/signup', [
+router.post('/signup', [
     body('email')
         .isEmail()
-        .withMessage("Please enter a valid email!")
+        .withMessage()
         .custom((value, { req }) => {
             return User.findOne({ email: value }).then(userDoc => {
                 if (userDoc) {
-                    console.log("user already in DB");
                     return Promise.reject("E-mail address already exists!");
                 }
             })
@@ -36,6 +30,5 @@ router.put('/signup', [
 ], authController.signup);
 
 router.post('/login', authController.login);
-
 
 module.exports = router;

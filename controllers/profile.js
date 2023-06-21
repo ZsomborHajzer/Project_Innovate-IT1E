@@ -2,19 +2,13 @@
 const User = require('../models/user');
 
 //import dependencies
-const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-
-/**
-    * * Get Profile Page takes in a token parameter of the userId, and returns the user's profile
- */
 
 exports.getProfilePage = async (req, res) => {
     const firstName = req.firstName;
     const lastName = req.lastName;
     const email = req.email;
     res.status(201).json({ firstName: firstName, lastName: lastName, email: email });
-
 };
 
 exports.patchPassword = async (req, res) => {
@@ -37,8 +31,6 @@ exports.patchPassword = async (req, res) => {
     };
     const hashedPassword = await bcrypt.hash(newPassword.trim(), 12);
     await User.findByIdAndUpdate({ _id: req.userId }, { $set: { password: hashedPassword } });
-
-
     res.status(201).json({ message: "Password Changed" });
 };
 
