@@ -41,3 +41,16 @@ exports.patchPassword = async (req, res) => {
 
     res.status(201).json({ message: "Password Changed" });
 };
+
+exports.patchName = async (req, res) => {
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+    const user = await User.findById({ _id: req.userId });
+    if(firstName === user.firstName && lastName === user.lastName){
+        return res.status(401).json({ message: "New name cannot be the same as the old name" });
+    } else {
+        await User.findByIdAndUpdate({ _id: req.userId }, { $set: { firstName: firstName, lastName: lastName } });
+        res.status(201).json({ message: "first name and last name changed" });
+    }
+
+};
