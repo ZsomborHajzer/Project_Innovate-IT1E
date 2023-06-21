@@ -42,7 +42,6 @@ const questionSchema = new Schema({
     }
 }, { collection: 'Questions' });
 
-
 const commentSchema = new Schema({
     comment: {
         type: String,

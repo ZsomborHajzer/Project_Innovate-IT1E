@@ -5,14 +5,12 @@ const router = express.Router();
 
 //import DB 
 const User = require('../models/user');
-const user = require('../models/user');
 const Assignments = db.collection('Assignments')
 const Achievements = db.collection('Achievements');
 
 exports.getAssigment = async (req, res) => {
     const chosenTopic = req.body.topic;
     const assignmentObj = await Assignments.findOne({ topic: chosenTopic });
-    console.log(assignmentObj.questions);
     res.status(200).json({ assignments: assignmentObj.questions });
 };
 
@@ -25,7 +23,6 @@ exports.getSpecificAssigment = async (req, res) => {
 
         for (let i = 0; i < questionObj.questions.length; i++) {
             if (questionObj.questions[i].questionNum === questionNum) {
-                console.log(questionObj.questions[i].question);
                 res.status(200).json({ question: questionObj.questions[i] });
                 return;
             }
