@@ -60,7 +60,7 @@ exports.getPost = async (req, res) => {
 exports.newPost = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(422).json({ message: "Invalid Input" });
+        return res.status(400).json({ message: "Invalid Input" });
     }
     try {
         const title = req.body.title;
@@ -80,9 +80,8 @@ exports.newPost = async (req, res) => {
         await newQuestion.save();
         res.status(201).json({ message: "Question Created" });
     } catch (err) {
-        res.status(401).json({ message: "Invalid Input" });
+        res.status(400).json({ message: "Invalid Input" });
     }
-
 };
 
 exports.newComment = async (req, res) => {
@@ -108,6 +107,6 @@ exports.newComment = async (req, res) => {
         await Question.findOneAndUpdate({ _id: questionId }, { $push: { comments: newComment._id } });
         res.status(201).json({ message: "Comment Created" });
     } catch (err) {
-        res.status(401).json({ message: "Invalid Input" });
+        res.status(400).json({ message: "Invalid Input" });
     }
 };

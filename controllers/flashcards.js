@@ -24,31 +24,38 @@ exports.getFlashcardsPage = async (req, res) => {
 
 exports.getDeck = async (req, res) => {
 
-    if (!req.query.deckId) {
-        return res.status(404).json({ message: "No Deck ID was provided" })
-    };
-
     if (req.method === "GET") {
-        const deck = await flashcardDeck.findById({ _id: req.query.deckId });
-        if (deck === null) return res.status(404).json({ message: "No Deck found" });
-        let returnedJson = {};
+        try {
+            deckId = req.query.deckId;
 
-        if (deck.flashcards.length == 0) {
-            return res.json({ message: "No Flashcards" }).status(204);
-        }
+            if (deckId === null) {
+                return res.status(400).json({ message: "No Deck ID was provided" })
+            };
 
-        for (let i = 0; i < deck.flashcards.length; i++) {
-            let side1Key = `side1_${i}`;
-            let side1Value = deck.flashcards[i].side1;
-            let side2Key = `side2_${i}`;
-            let side2Value = deck.flashcards[i].side2;
-            let flashcardIdKey = "flashcardId" + i;
-            let flashcardIdValue = deck.flashcards[i]._id;
-            returnedJson[side1Key] = side1Value;
-            returnedJson[side2Key] = side2Value;
-            returnedJson[flashcardIdKey] = flashcardIdValue;
+            const deck = await flashcardDeck.findById({ _id: deckId });
+            if (deck === null) return res.status(400).json({ message: "No Deck found" });
+
+            let returnedJson = {};
+
+            if (deck.flashcards.length == 0) {
+                return res.json({ message: "No Flashcards" }).status(204);
+            }
+
+            for (let i = 0; i < deck.flashcards.length; i++) {
+                let side1Key = `side1_${i}`;
+                let side1Value = deck.flashcards[i].side1;
+                let side2Key = `side2_${i}`;
+                let side2Value = deck.flashcards[i].side2;
+                let flashcardIdKey = "flashcardId" + i;
+                let flashcardIdValue = deck.flashcards[i]._id;
+                returnedJson[side1Key] = side1Value;
+                returnedJson[side2Key] = side2Value;
+                returnedJson[flashcardIdKey] = flashcardIdValue;
+            }
+            res.status(201).json(returnedJson);
+        } catch (err) {
+            res.status(400).json({ message: "Deck not found" });
         }
-        res.status(201).json(returnedJson);
 
     } else if (req.method === "DELETE") {
 
@@ -59,7 +66,7 @@ exports.getDeck = async (req, res) => {
             await flashcardDeck.findOneAndUpdate({ _id: deckId }, { $pull: { flashcards: { _id: flashcardId } } });
             res.status(200).json({ message: "Flashcard Deleted" });
         } catch (err) {
-            res.status(404).json({ message: "Flashcard not found" });
+            res.status(400).json({ message: "Flashcard not found" });
         }
 
     }
@@ -75,7 +82,7 @@ exports.newDeck = async (req, res) => {
 
     if (!errors.isEmpty()) {
         const error = new Error("Validation Failed.");
-        error.statusCode = 422;
+        error.statusCode = 400;
         error.data = errors.array();
         throw error;
     }

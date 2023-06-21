@@ -33,6 +33,6 @@ exports.getTestGenerationPage = async (req, res) => {
         });
         res.status(200).json({ response: JSON.parse(response.data.choices[0].text) });
     } catch (err) {
-        res.status(500).json({ error: err });
+        res.status(500).json({ message: err });
     }
 };
