@@ -4,6 +4,7 @@ const { flashcardCollection, flashcardDeck, flashcard } = require('../models/fla
 
 exports.getFlashcardsPage = async (req, res) => {
     const collection = await flashcardCollection.findById({ _id: req.collectionId });
+    if (collection === null) return res.status(404).json({ message: "No Collection found" });
     let returnedJson = {};
 
     if (collection.decks.length == 0) {
@@ -29,6 +30,7 @@ exports.getDeck = async (req, res) => {
 
     if (req.method === "GET") {
         const deck = await flashcardDeck.findById({ _id: req.query.deckId });
+        if (deck === null) return res.status(404).json({ message: "No Deck found" });
         let returnedJson = {};
 
         if (deck.flashcards.length == 0) {
@@ -49,11 +51,17 @@ exports.getDeck = async (req, res) => {
         res.status(201).json(returnedJson);
 
     } else if (req.method === "DELETE") {
-        const flashcardId = req.body.flashcardId;
-        const deckId = req.query.deckId;
-        await flashcard.findByIdAndDelete({ _id: flashcardId });
-        await flashcardDeck.findOneAndUpdate({ _id: deckId }, { $pull: { flashcards: { _id: flashcardId } } });
-        res.status(200).json({ message: "Flashcard Deleted" });
+
+        try {
+            const flashcardId = req.body.flashcardId;
+            const deckId = req.query.deckId;
+            await flashcard.findByIdAndDelete({ _id: flashcardId });
+            await flashcardDeck.findOneAndUpdate({ _id: deckId }, { $pull: { flashcards: { _id: flashcardId } } });
+            res.status(200).json({ message: "Flashcard Deleted" });
+        } catch (err) {
+            res.status(404).json({ message: "Flashcard not found" });
+        }
+
     }
 };
 

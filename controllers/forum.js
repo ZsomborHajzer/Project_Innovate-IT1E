@@ -6,7 +6,7 @@ const User = require('../models/user');
 
 exports.getForumPage = async (req, res) => {
     const questions = await Question.find();
-    if (questions === null) return res.status(404).json({ message: "No Questions exist" });
+    if (questions === null) questions = [];
     res.status(200).json({ questions: questions });
 };
 
@@ -63,7 +63,6 @@ exports.newPost = async (req, res) => {
         return res.status(422).json({ message: "Invalid Input" });
     }
     try {
-
         const title = req.body.title;
         const question = req.body.question;
         const firstName = req.firstName;
@@ -81,7 +80,7 @@ exports.newPost = async (req, res) => {
         await newQuestion.save();
         res.status(201).json({ message: "Question Created" });
     } catch (err) {
-        res.status(500).json({ message: "Server Error" });
+        res.status(401).json({ message: "Invalid Input" });
     }
 
 };
@@ -109,6 +108,6 @@ exports.newComment = async (req, res) => {
         await Question.findOneAndUpdate({ _id: questionId }, { $push: { comments: newComment._id } });
         res.status(201).json({ message: "Comment Created" });
     } catch (err) {
-        res.status(500).json({ message: "Server Error" });
+        res.status(401).json({ message: "Invalid Input" });
     }
 };
