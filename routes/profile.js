@@ -14,6 +14,4 @@ router.patch('/', isAuth, patchPassword);
 
 router.patch('/resetname', isAuth, patchName);
 
-
-
 module.exports = router;

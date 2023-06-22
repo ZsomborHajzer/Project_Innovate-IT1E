@@ -15,13 +15,13 @@ exports.getSignUp = async (req, res) => {
 
 exports.signup = (req, res, next) => {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
         const error = new Error("Validation Failed.");
         error.statusCode = 400;
         error.data = errors.array();
         res.status(422).json({ field: errors.array()[0].path, errors: errors.array()[0].msg });
         throw error;
-
     }
     const email = req.body.email;
     const password = req.body.password;
@@ -45,6 +45,7 @@ exports.signup = (req, res, next) => {
             res.status(201).json({ message: "User succesfully created!", userId: result._id });
         })
         .catch(err => {
+
             if (!err.statusCode) {
                 err.statusCode = 400;
             }
@@ -57,8 +58,8 @@ exports.login = async (req, res, next) => {
     const password = req.body.password;
     let loadedUser;
     let loadedFlashcardCollection;
-
     User.findOne({ email: email }).then(user => {
+
         if (!user) {
             const error = new Error('A user with this credentials does not exist.');
             error.statusCode = 400;
@@ -69,6 +70,7 @@ exports.login = async (req, res, next) => {
         return bcrypt.compare(password, user.password);
     })
         .then(async (isEqual) => {
+
             if (!isEqual) {
                 const error = new Error("A user with this credentials does not exist.");
                 error.statusCode = 401;
@@ -80,6 +82,7 @@ exports.login = async (req, res, next) => {
             res.status(200).json({ token: token })
         })
         .catch(err => {
+
             if (!err.statusCode) {
                 err.statusCode = 400;
             }
@@ -90,6 +93,7 @@ exports.login = async (req, res, next) => {
 //function to find userID async way since it was needed.
 async function getCollectionId(loadedUserID) {
     const collection = await flashcardCollection.findOne({ userID: loadedUserID });
+
     if (!collection) {
         error.statusCode = 400;
         throw new Error(`No collection found.`);

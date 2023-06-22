@@ -4,6 +4,7 @@ const { flashcardCollection, flashcardDeck, flashcard } = require('../models/fla
 
 exports.getFlashcardsPage = async (req, res) => {
     const collection = await flashcardCollection.findById({ _id: req.collectionId });
+
     if (collection === null) return res.status(404).json({ message: "No Collection found" });
     let returnedJson = {};
 
@@ -159,6 +160,7 @@ exports.updateDeck = async (req, res, next) => {
 
             if (i % 2 === 1) {
                 let fid = await flashcard.findOneAndUpdate({ _id: flashcardID, deckId: deck._id }, { $set: { side2: newFlashcardsArr[i] } });
+
                 if (!flashcardUpdateIndexId.includes(fid._id)) {
                     flashcardUpdateIndexId.push(fid._id);
                 }

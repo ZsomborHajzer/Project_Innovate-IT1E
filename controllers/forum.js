@@ -6,6 +6,7 @@ const User = require('../models/user');
 
 exports.getForumPage = async (req, res) => {
     const questions = await Question.find();
+
     if (questions === null) questions = [];
     res.status(200).json({ questions: questions });
 };
@@ -13,11 +14,14 @@ exports.getForumPage = async (req, res) => {
 exports.getPost = async (req, res) => {
 
     if (req.method === "GET") {
+
         if (!req.query.questionId) return res.status(422).json({ message: "Invalid Input" });
         const questionId = req.query.questionId;
         const question = await Question.findById(questionId);
+
         if (question === null) return res.status(422).json({ message: "No Question in existence" });
         const comments = await Comment.find({ questionId: questionId });
+
         if (comments === null) comments = [];
         res.status(200).json({ question: question, comments: comments });
 
@@ -29,6 +33,7 @@ exports.getPost = async (req, res) => {
 
         if (type === "question") {
             const existingVote = await User.findOne({ _id: userId, questionVotes: id });
+
             if (existingVote) return res.status(403).json({ message: "User has already voted on this post" });
 
             if (value === "1") {
@@ -42,6 +47,7 @@ exports.getPost = async (req, res) => {
 
         } else if (type === "comment") {
             const existingVote = await User.findOne({ _id: userId, commentVotes: id });
+
             if (existingVote) return res.status(403).json({ message: "User has already voted on this comment" });
 
             if (value === "1") {
@@ -59,6 +65,7 @@ exports.getPost = async (req, res) => {
 
 exports.newPost = async (req, res) => {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
         return res.status(400).json({ message: "Invalid Input" });
     }
