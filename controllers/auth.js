@@ -17,7 +17,7 @@ exports.signup = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         const error = new Error("Validation Failed.");
-        error.statusCode = 422;
+        error.statusCode = 400;
         error.data = errors.array();
         res.status(422).json({ field: errors.array()[0].path, errors: errors.array()[0].msg });
         throw error;
@@ -46,7 +46,7 @@ exports.signup = (req, res, next) => {
         })
         .catch(err => {
             if (!err.statusCode) {
-                err.statusCode = 500;
+                err.statusCode = 400;
             }
             next(err);
         });
@@ -61,8 +61,8 @@ exports.login = async (req, res, next) => {
     User.findOne({ email: email }).then(user => {
         if (!user) {
             const error = new Error('A user with this credentials does not exist.');
-            error.statusCode = 401;
-            res.status(401).json({ message: error.message });
+            error.statusCode = 400;
+            res.status(400).json({ errors: error.message });
             throw error;
         }
         loadedUser = user;
@@ -72,16 +72,16 @@ exports.login = async (req, res, next) => {
             if (!isEqual) {
                 const error = new Error("A user with this credentials does not exist.");
                 error.statusCode = 401;
-                res.status(401).json({ message: error.message });
+                res.status(401).json({ errors: error.message });
                 throw error;
             }
             loadedFlashcardCollection = await getCollectionId(loadedUser._id);
-            const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString(), collectionId: loadedFlashcardCollection.toString(), firstName: loadedUser.firstName, lastName: loadedUser.lastName, email: loadedUser.email }, 'JWTSECRETTOKEN', { expiresIn: '2h' });
+            const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString(), collectionId: loadedFlashcardCollection.toString(), firstName: loadedUser.firstName, lastName: loadedUser.lastName, email: loadedUser.email }, 'JWTSECRETTOKEN', { expiresIn: '100h' });
             res.status(200).json({ token: token })
         })
         .catch(err => {
             if (!err.statusCode) {
-                err.statusCode = 500;
+                err.statusCode = 400;
             }
             next(err);
         })
@@ -91,7 +91,7 @@ exports.login = async (req, res, next) => {
 async function getCollectionId(loadedUserID) {
     const collection = await flashcardCollection.findOne({ userID: loadedUserID });
     if (!collection) {
-        error.statusCode = 401;
+        error.statusCode = 400;
         throw new Error(`No collection found.`);
     }
     return collection._id;

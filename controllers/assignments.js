@@ -9,17 +9,19 @@ const Assignments = db.collection('Assignments')
 const Achievements = db.collection('Achievements');
 
 exports.getAssigment = async (req, res) => {
-    const chosenTopic = req.body.topic;
+    const chosenTopic = req.query.topic;
     const assignmentObj = await Assignments.findOne({ topic: chosenTopic });
+    if (assignmentObj === null) return res.status(400).json({ message: "Assignment not found" });
     res.status(200).json({ assignments: assignmentObj.questions });
 };
 
 exports.getSpecificAssigment = async (req, res) => {
 
     if (req.method === "GET") {
-        const topic = req.body.topic;
-        const questionNum = req.body.questionNum;
+        const topic = req.query.topic;
+        const questionNum = req.query.questionNum;
         const questionObj = await Assignments.findOne({ topic: topic });
+        if (questionObj === null) return res.status(400).json({ message: "Question not found" });
 
         for (let i = 0; i < questionObj.questions.length; i++) {
             if (questionObj.questions[i].questionNum === questionNum) {
@@ -39,6 +41,7 @@ exports.getSpecificAssigment = async (req, res) => {
             const achievementObj = await Achievements.findOne({"Topic" : title});
             console.log(achievementObj);
             const userObj = await User.findOne({ _id: req.userId });
+            if (userObj === null) return res.status(400).json({ message: "User not found" });
             if (userObj.completedPHPAssigments.includes(title)) {
                 if(achievementObj !== null && userObj.achievementsUnlocked.includes(achievementObj.title)){
                     res.status(200).json({ message: "Already completed this assignment and achievement unlocked" });
@@ -121,6 +124,7 @@ exports.getNumberOfQuestions = async (req, res) => {
     const PHPObj = await Assignments.findOne({ topic: "PHP" });
     const JAVAObj = await Assignments.findOne({ topic: "JAVA" });
     const HTMLObj = await Assignments.findOne({ topic: "HTML/CSS" });
+    if (PHPObj === null || JAVAObj === null || HTMLObj === null) return res.status(400).json({ message: "Something went wrong" });
 
     const PHPNum = PHPObj.questions.length;
     const JAVANum = JAVAObj.questions.length;
