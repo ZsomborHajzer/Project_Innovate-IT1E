@@ -41,13 +41,14 @@ exports.getDeck = async (req, res) => {
             const deck = await flashcardDeck.findById({ _id: deckId });
 
             if (deck === null) return res.status(400).json({ message: "No Deck found" });
-            let returnedJson = {};
+
 
             if (deck.flashcards.length == 0) {
                 return res.json({ message: "No Flashcards" }).status(204);
             }
-
+            let objArr = [];
             for (let i = 0; i < deck.flashcards.length; i++) {
+                let returnedJson = {};
                 let side1Key = `side1_${i}`;
                 let side1Value = deck.flashcards[i].side1;
                 let side2Key = `side2_${i}`;
@@ -57,8 +58,9 @@ exports.getDeck = async (req, res) => {
                 returnedJson[side1Key] = side1Value;
                 returnedJson[side2Key] = side2Value;
                 returnedJson[flashcardIdKey] = flashcardIdValue;
+                objArr.push(returnedJson);
             }
-            res.status(201).json(returnedJson);
+            res.status(201).json(objArr);
         } catch (err) {
             res.status(400).json({ message: "Deck not found" });
         }
