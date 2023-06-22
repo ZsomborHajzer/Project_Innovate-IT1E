@@ -16,98 +16,64 @@ Maybe you can mention me or this repo in the acknowledgements too
 # :notebook_with_decorative_cover: Table of Contents
 
 - [About the Project](#star2-about-the-project)
-  * [Tech Stack](#space_invader-tech-stack)
-  * [Features](#dart-features)
-  * [Environment Variables](#key-environment-variables)
+- [Tech Stack](#space_invader-tech-stack)
+- [Features](#dart-features)
+- [Environment Variables](#key-environment-variables)
 - [Getting Started](#toolbox-getting-started)
-  * [Prerequisites](#bangbang-prerequisites)
-  * [Installation](#gear-installation)
-  * [Running Tests](#test_tube-running-tests)
-  * [Run Locally](#running-run-locally)
-  * [Deployment](#triangular_flag_on_post-deployment)
+- [Prerequisites](#bangbang-prerequisites)
+- [Installation](#gear-installation)
+- [Running Tests](#test_tube-running-tests)
+- [Run Locally](#running-run-locally)
+- [Deployment](#triangular_flag_on_post-deployment)
 - [Usage](#eyes-usage)
 - [Roadmap](#compass-roadmap)
 - [Contributing](#wave-contributing)
-  * [Code of Conduct](#scroll-code-of-conduct)
+- [Code of Conduct](#scroll-code-of-conduct)
 
 
-  
 
 <!-- About the Project -->
 ## :star2: About the Project
-
-
-<!-- Screenshots -->
-### :camera: Screenshots
-
-<div align="center"> 
-  <img src="https://placehold.co/600x400?text=Your+Screenshot+here" alt="screenshot" />
-</div>
 
 
 <!-- TechStack -->
 ### :space_invader: Tech Stack
 
 <details>
-  <summary>Client</summary>
-  <ul>
-    <li><a href="https://www.typescriptlang.org/">Typescript</a></li>
-    <li><a href="https://nextjs.org/">Next.js</a></li>
-    <li><a href="https://reactjs.org/">React.js</a></li>
-    <li><a href="https://tailwindcss.com/">TailwindCSS</a></li>
-  </ul>
-</details>
-
-<details>
   <summary>Server</summary>
   <ul>
-    <li><a href="https://www.typescriptlang.org/">Typescript</a></li>
+    <li><a href="https://nodejs.org/">NodeJS</a></li>
     <li><a href="https://expressjs.com/">Express.js</a></li>
-    <li><a href="https://go.dev/">Golang</a></li>
-    <li><a href="https://nestjs.com/">Nest.js</a></li>
-    <li><a href="https://socket.io/">SocketIO</a></li>
-    <li><a href="https://www.prisma.io/">Prisma</a></li>    
-    <li><a href="https://www.apollographql.com/">Apollo</a></li>
-    <li><a href="https://graphql.org/">GraphQL</a></li>
+    <li><a href="https://restfulapi.net/">REST API</a></li>
   </ul>
 </details>
 
 <details>
 <summary>Database</summary>
   <ul>
-    <li><a href="https://www.mysql.com/">MySQL</a></li>
-    <li><a href="https://www.postgresql.org/">PostgreSQL</a></li>
-    <li><a href="https://redis.io/">Redis</a></li>
-    <li><a href="https://neo4j.com/">Neo4j</a></li>
     <li><a href="https://www.mongodb.com/">MongoDB</a></li>
   </ul>
 </details>
 
 <details>
-<summary>DevOps</summary>
+<summary>Other Tools</summary>
   <ul>
-    <li><a href="https://www.docker.com/">Docker</a></li>
-    <li><a href="https://www.jenkins.io/">Jenkins</a></li>
-    <li><a href="https://circleci.com/">CircleCLI</a></li>
+    <li><a href="https://www.mongodb.com/">PostMan</a></li>
+    <li><a href="https://railway.app">Railway</a></li>
   </ul>
 </details>
 
-<!-- Features -->
-### :dart: Features
+<summary>Dependencies</summary>
+  <ul>
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+  </ul>
+</details>
 
-- Feature 1
-- Feature 2
-- Feature 3
-
-<!-- Color Reference -->
-### :art: Color Reference
-
-| Color             | Hex                                                                |
-| ----------------- | ------------------------------------------------------------------ |
-| Primary Color | ![#222831](https://via.placeholder.com/10/222831?text=+) #222831 |
-| Secondary Color | ![#393E46](https://via.placeholder.com/10/393E46?text=+) #393E46 |
-| Accent Color | ![#00ADB5](https://via.placeholder.com/10/00ADB5?text=+) #00ADB5 |
-| Text Color | ![#EEEEEE](https://via.placeholder.com/10/EEEEEE?text=+) #EEEEEE |
 
 
 <!-- Env Variables -->
