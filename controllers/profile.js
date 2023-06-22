@@ -16,6 +16,7 @@ exports.patchPassword = async (req, res) => {
     const currentPassword = req.body.currentPassword;
     const newPassword = req.body.newPassword;
     const user = await User.findById({ _id: req.userId });
+
     if (!user) return res.status(400).json({ message: "User not found" });
     const isEqual = await bcrypt.compare(currentPassword, user.password);
 
@@ -39,7 +40,10 @@ exports.patchName = async (req, res) => {
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
     const user = await User.findById({ _id: req.userId });
-    if(firstName === user.firstName && lastName === user.lastName){
+
+    if (!user) return res.status(400).json({ message: "User not found" });
+
+    if (firstName === user.firstName && lastName === user.lastName) {
         return res.status(401).json({ message: "New name cannot be the same as the old name" });
     } else {
         await User.findByIdAndUpdate({ _id: req.userId }, { $set: { firstName: firstName, lastName: lastName } });

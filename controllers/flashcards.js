@@ -34,8 +34,8 @@ exports.getDeck = async (req, res) => {
             };
 
             const deck = await flashcardDeck.findById({ _id: deckId });
-            if (deck === null) return res.status(400).json({ message: "No Deck found" });
 
+            if (deck === null) return res.status(400).json({ message: "No Deck found" });
             let returnedJson = {};
 
             if (deck.flashcards.length == 0) {
