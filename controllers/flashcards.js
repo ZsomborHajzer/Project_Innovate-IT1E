@@ -17,9 +17,9 @@ exports.getFlashcardsPage = async (req, res) => {
 
     for (let i = 0; i < collection.decks.length; i++) {
         let returnedJson = {};
-        let deckKey = "setTitle" + i;
+        let deckKey = "setTitle";
         let newValue = collection.decks[i].setTitle;
-        let deckIdKey = "deckId" + i;
+        let deckIdKey = "deckId";
         let deckIdValue = collection.decks[i]._id;
         returnedJson[deckKey] = newValue;
         returnedJson[deckIdKey] = deckIdValue;
@@ -49,11 +49,11 @@ exports.getDeck = async (req, res) => {
             let objArr = [];
             for (let i = 0; i < deck.flashcards.length; i++) {
                 let returnedJson = {};
-                let side1Key = `side1_${i}`;
+                let side1Key = `side1`;
                 let side1Value = deck.flashcards[i].side1;
-                let side2Key = `side2_${i}`;
+                let side2Key = `side2`;
                 let side2Value = deck.flashcards[i].side2;
-                let flashcardIdKey = "flashcardId" + i;
+                let flashcardIdKey = "flashcardId";
                 let flashcardIdValue = deck.flashcards[i]._id;
                 returnedJson[side1Key] = side1Value;
                 returnedJson[side2Key] = side2Value;
