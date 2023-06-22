@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 //import controllers
-const { getProfilePage, patchPassword } = require('../controllers/profile');
+const { getProfilePage, patchPassword, patchName } = require('../controllers/profile');
 
 //import middlewares
 const isAuth = require('../middleware/is-auth');
@@ -11,5 +11,9 @@ const isAuth = require('../middleware/is-auth');
 router.get('/', isAuth, getProfilePage);
 
 router.patch('/', isAuth, patchPassword);
+
+router.patch('/resetname', isAuth, patchName);
+
+
 
 module.exports = router;
