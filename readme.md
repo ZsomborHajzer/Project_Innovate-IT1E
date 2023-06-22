@@ -91,7 +91,7 @@ Maybe you can mention me or this repo in the acknowledgements too
 
 To run this project, you will need to add the following environment variables to your .env file
 
-`MONGO DP URI`
+`MONGO_DB_URI`
 
 `OPENAI_API_KEY`
 
@@ -106,25 +106,11 @@ These values are provided in a txt file when the project is turned in
 ### :bangbang: Prerequisites
 
 This project uses Node.js as a javascript runtime enviroment version 20.3.1, If you do not have Node.js downloaded or if it is an older version you can download it from <a href=https://nodejs.org>HERE</a>
-
-<!-- Installation -->
-### :gear: Installation
-
-Install my-project with npm
-
-```bash
-  yarn install my-project
-  cd my-project
-```
    
 <!-- Running Tests -->
 ### :test_tube: Running Tests
 
-To run tests, run the following command
-
-```bash
-  yarn test test
-```
+Current testing part of the backend is still under developement
 
 <!-- Run Locally -->
 ### :running: Run Locally
@@ -132,42 +118,36 @@ To run tests, run the following command
 Clone the project
 
 ```bash
-  git clone https://github.com/Louis3797/awesome-readme-template.git
+  git clone https://github.com/ZsomborHajzer/Project_Innovate-IT1E-BackEnd.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd my-project
+  cd Project_Innovate-IT1E-BackEnd
 ```
 
 Install dependencies
 
 ```bash
-  yarn install
+  npm install
 ```
 
 Start the server
 
 ```bash
-  yarn start
+  npm start
 ```
 
-
-<!-- Deployment -->
-### :triangular_flag_on_post: Deployment
-
-To deploy this project run
-
-```bash
-  yarn deploy
-```
-
-
-<!-- Usage -->
+<!-- Usage -->  
 ## :eyes: Usage
 
-Use this space to tell a little more about your project and how it can be used. Show additional screenshots, code samples, demos or link to other resources.
+Since this is a back-end server that communicates with the frontend through REST APIs, it is difficult to represent all of its capabilities visually.
+
+For this we have built a PostMan request collection to both test and present our work thoughout this project.
+
+This collection can be accessed from the following link:
+<a href=https://www.postman.com/galactic-space-226728/workspace/project-innovate-backend>https://www.postman.com/galactic-space-226728/workspace/project-innovate-backend</a>
 
 
 ```javascript
