@@ -6,21 +6,26 @@ exports.getFlashcardsPage = async (req, res) => {
     const collection = await flashcardCollection.findById({ _id: req.collectionId });
 
     if (collection === null) return res.status(404).json({ message: "No Collection found" });
-    let returnedJson = {};
+
 
     if (collection.decks.length == 0) {
         return res.json({ message: "No Decks" }).status(204);
     }
 
+
+    let objArr = [];
+
     for (let i = 0; i < collection.decks.length; i++) {
+        let returnedJson = {};
         let deckKey = "setTitle" + i;
         let newValue = collection.decks[i].setTitle;
         let deckIdKey = "deckId" + i;
         let deckIdValue = collection.decks[i]._id;
         returnedJson[deckKey] = newValue;
         returnedJson[deckIdKey] = deckIdValue;
+        objArr.push(returnedJson);
     }
-    res.status(201).json(returnedJson);
+    res.status(201).json(objArr);
 };
 
 exports.getDeck = async (req, res) => {
@@ -88,6 +93,10 @@ exports.newDeck = async (req, res) => {
         throw error;
     }
     const title = req.body.title;
+
+    if (title === null || title === undefined || title === "") {
+        title = "Title";
+    }
 
     const deck = new flashcardDeck({
         collectionId: req.collectionId,
