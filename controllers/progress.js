@@ -1,3 +1,4 @@
+
 //initialize express router
 const express = require('express');
 const { db } = require('../models/user');
@@ -27,5 +28,4 @@ exports.getProgress = async (req, res) => {
     HTMLAvailableQuestions = HTMLavailable.questions.length;
 
     res.status(200).json({ "PHPComp": PHPcompleted, "PHPTotal": PHPAvailableQuestions, "JAVAComp": JAVAcompleted, "JAVATotal": JAVAAvailableQuestions, "HTMLComp": HTMLcompleted, "HTMLTotal": HTMLAvailableQuestions });
-
 };

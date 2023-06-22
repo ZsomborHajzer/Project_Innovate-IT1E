@@ -56,6 +56,9 @@ app.use("/testGeneration", testGeneratorRouter);
 const progressRouter = require("./routes/progress.js");
 app.use("/progress", progressRouter);
 
+const achievementsRouter = require("./routes/achievements.js");
+app.use("/achievements", achievementsRouter);
+
 app.get('*', (req, res) => {
     res.status('404').send('Error Page 404', 404);
 });
