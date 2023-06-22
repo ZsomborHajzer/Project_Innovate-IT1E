@@ -30,6 +30,7 @@ Maybe you can mention me or this repo in the acknowledgements too
 - [Contributing](#wave-contributing)
 - [Code of Conduct](#scroll-code-of-conduct)
 
+</br>
 
 
 <!-- About the Project -->
@@ -63,14 +64,23 @@ Maybe you can mention me or this repo in the acknowledgements too
   </ul>
 </details>
 
+<details>
 <summary>Dependencies</summary>
   <ul>
-    <li><a href=""></a></li>
-    <li><a href=""></a></li>
-    <li><a href=""></a></li>
-    <li><a href=""></a></li>
-    <li><a href=""></a></li>
-    <li><a href=""></a></li>
+    <li><a href="https://www.npmjs.com/package/bcrypt">bcryptjs version: 2.4.3</a></li>
+    <li><a href="https://www.npmjs.com/package/body-parser">body-parser version: 1.20.2</a></li>
+    <li><a href="https://www.npmjs.com/package/cors">cors version: 2.8.5</a></li>
+    <li><a href="https://www.npmjs.com/package/dotenv">dotenv version: 16.0.3 </a></li>
+    <li><a href="https://www.npmjs.com/package/express">express version: 4.18.2 </a></li>
+    <li><a href="https://www.npmjs.com/package/express-validator">express-validator version: 7.0.1</a></li>
+    <li><a href="https://www.npmjs.com/package/fs">fs version: 0.0.1-security</a></li>
+    <li><a href="https://www.npmjs.com/package/helmet">helmet version: 7.0.0</a></li>
+    <li><a href="https://www.npmjs.com/package/jsonwebtoken">jsonwebtoken version: 9.0.0</a></li>
+    <li><a href="https://www.npmjs.com/package/mongoose">mongoose version: 7.1.1</a></li>
+    <li><a href="https://www.npmjs.com/package/morgan">morgan version: 1.10.0</a></li>
+    <li><a href="https://www.npmjs.com/package/nodemon">nodemon version: 2.0.22</a></li>
+    <li><a href="https://www.npmjs.com/package/openai">openai version: 3.2.1</a></li>
+    <li><a href="https://www.npmjs.com/package/path">path version: 0.12.7</a></li>
   </ul>
 </details>
 
@@ -81,9 +91,13 @@ Maybe you can mention me or this repo in the acknowledgements too
 
 To run this project, you will need to add the following environment variables to your .env file
 
-`API_KEY`
+`MONGO DP URI`
 
-`ANOTHER_API_KEY`
+`OPENAI_API_KEY`
+
+`PORT`
+
+These values are provided in a txt file when the project is turned in
 
 <!-- Getting Started -->
 ## 	:toolbox: Getting Started
@@ -91,11 +105,7 @@ To run this project, you will need to add the following environment variables to
 <!-- Prerequisites -->
 ### :bangbang: Prerequisites
 
-This project uses Yarn as package manager
-
-```bash
- npm install --global yarn
-```
+This project uses Node.js as a javascript runtime enviroment version 20.3.1, If you do not have Node.js downloaded or if it is an older version you can download it from <a href=https://nodejs.org>HERE</a>
 
 <!-- Installation -->
 ### :gear: Installation
