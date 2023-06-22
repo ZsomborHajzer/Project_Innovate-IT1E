@@ -1,94 +1,158 @@
-Signup: 
+<!--
+Hey, thanks for using the awesome-readme-template template.  
+If you have any enhancements, then fork this project and create a pull request 
+or just open an issue with the label "enhancement".
 
-Backend information: 
+Don't forget to give this project a star for additional support ;)
+Maybe you can mention me or this repo in the acknowledgements too
+-->
+<div align="center">
 
-Sign-up URL : localhost:8082/auth/signup 
+  <h1>Project Innovate IT1E Backend repository</h1>
+  
+<br />
 
-Request method: PUT 
+<!-- Table of Contents -->
+# :notebook_with_decorative_cover: Table of Contents
 
-Required info:  
+- [About the Project](#star2-about-the-project)
+- [Tech Stack](#space_invader-tech-stack)
+- [Features](#dart-features)
+- [Environment Variables](#key-environment-variables)
+- [Getting Started](#toolbox-getting-started)
+- [Prerequisites](#bangbang-prerequisites)
+- [Installation](#gear-installation)
+- [Running Tests](#test_tube-running-tests)
+- [Run Locally](#running-run-locally)
+- [Deployment](#triangular_flag_on_post-deployment)
+- [Usage](#eyes-usage)
+</br>
 
-{ 
-email: “exampleemail@gmail.com”, 
-password: “Atleast5letters”, 
-firstName:”John”, 
-lastName: “Doe” 
 
-} 
+<!-- About the Project -->
+## :star2: About the Project
 
-Possible returns:  
 
-“Validation Failed” Status: 422 
+<!-- TechStack -->
+### :space_invader: Tech Stack
 
-OR 
+<details>
+  <summary>Server</summary>
+  <ul>
+    <li><a href="https://nodejs.org/">NodeJS</a></li>
+    <li><a href="https://expressjs.com/">Express.js</a></li>
+    <li><a href="https://restfulapi.net/">REST API</a></li>
+  </ul>
+</details>
 
-{ 
+<details>
+<summary>Database</summary>
+  <ul>
+    <li><a href="https://www.mongodb.com/">MongoDB</a></li>
+  </ul>
+</details>
 
-Message: “User successfully created!”, 
+<details>
+<summary>Other Tools</summary>
+  <ul>
+    <li><a href="https://www.mongodb.com/">PostMan</a></li>
+    <li><a href="https://railway.app">Railway</a></li>
+  </ul>
+</details>
 
- userID: “64633e1c095fd0b128f6f76d” 
+<details>
+<summary>Dependencies</summary>
+  <ul>
+    <li><a href="https://www.npmjs.com/package/bcrypt">bcryptjs version: 2.4.3</a></li>
+    <li><a href="https://www.npmjs.com/package/body-parser">body-parser version: 1.20.2</a></li>
+    <li><a href="https://www.npmjs.com/package/cors">cors version: 2.8.5</a></li>
+    <li><a href="https://www.npmjs.com/package/dotenv">dotenv version: 16.0.3 </a></li>
+    <li><a href="https://www.npmjs.com/package/express">express version: 4.18.2 </a></li>
+    <li><a href="https://www.npmjs.com/package/express-validator">express-validator version: 7.0.1</a></li>
+    <li><a href="https://www.npmjs.com/package/fs">fs version: 0.0.1-security</a></li>
+    <li><a href="https://www.npmjs.com/package/helmet">helmet version: 7.0.0</a></li>
+    <li><a href="https://www.npmjs.com/package/jsonwebtoken">jsonwebtoken version: 9.0.0</a></li>
+    <li><a href="https://www.npmjs.com/package/mongoose">mongoose version: 7.1.1</a></li>
+    <li><a href="https://www.npmjs.com/package/morgan">morgan version: 1.10.0</a></li>
+    <li><a href="https://www.npmjs.com/package/nodemon">nodemon version: 2.0.22</a></li>
+    <li><a href="https://www.npmjs.com/package/openai">openai version: 3.2.1</a></li>
+    <li><a href="https://www.npmjs.com/package/path">path version: 0.12.7</a></li>
+  </ul>
+</details>
 
-} 
 
-Status: 201 
 
- 
+<!-- Env Variables -->
+### :key: Environment Variables
 
-Login: 
+To run this project, you will need to add the following environment variables to your .env file
 
-Backend information: 
+`MONGO_DB_URI`
 
-Login URL: localhost:8082/auth/login 
+`OPENAI_API_KEY`
 
-Request method: POST 
+`PORT`
 
-Required info:  
+These values are provided in a .txt file named envVariables when the project is turned in
 
-{ 
+<!-- Getting Started -->
+## 	:toolbox: Getting Started
 
-“email”: “exampleemail@gmail.com”, 
-“password”: “Atleast5lettersPassword”, 
+<!-- Prerequisites -->
+### :bangbang: Prerequisites
 
-} 
+This project uses Node.js as a javascript runtime enviroment version 20.3.1, If you do not have Node.js downloaded or if it is an older version you can download it from <a href=https://nodejs.org>HERE</a>
+   
+<!-- Running Tests -->
+### :test_tube: Running Tests
 
- 
+Current testing part of the backend is still under developement
 
-Possible Returns: 
+<!-- Run Locally -->
+### :running: Run Locally
 
-{ 
+Clone the project
 
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Inpzb21ib3IzLmhhanplckBnbWFpbC5jb20iLCJ1c2VySWQiOiI2NDYzM2VjMTA5NWZkMGIxMjhmNmY3NzIiLCJpYXQiOjE2ODQyMjU4MzAsImV4cCI6MTY4NDIzMzAzMH0.aDhfjB9n88kQwoA9X72OfIqPfqePxt56801b47mgDzw", 
+```bash
+  git clone https://github.com/ZsomborHajzer/Project_Innovate-IT1E-BackEnd.git
+```
 
-    "userId": "64633ec1095fd0b128f6f772" 
+Go to the project directory
 
-}  
+```bash
+  cd Project_Innovate-IT1E-BackEnd
+```
 
-status: 200 
- 
-OR 
+Install dependencies
 
-Error: Wrong Password 
+```bash
+  npm install
+```
 
-Status: 201; 
+Start the server
 
-OR 
+```bash
+  npm start
+```
 
-Error: A user with this email does not exist 
+<!-- Usage -->  
+## :eyes: Usage
 
-Status: 201; 
+Since this is a back-end server that communicates with the frontend through REST APIs, it is difficult to represent all of its capabilities visually.
 
- 
+For this we have built a PostMan request collection to both test and present our work thoughout this project.
 
-JWT authorization on every subsequent page requires: 
+This collection can be accessed from the following link:
+<a href=https://www.postman.com/galactic-space-226728/workspace/project-innovate-backend>https://www.postman.com/galactic-space-226728/workspace/project-innovate-backend</a>
 
-Header:  
 
-Authentication : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Inpzb21ib3IzLmhhanplckBnbWFpbC5jb20iLCJ1c2VySWQiOiI2NDYzM2VjMTA5NWZkMGIxMjhmNmY3NzIiLCJpYXQiOjE2ODQyMjU4MzAsImV4cCI6MTY4NDIzMzAzMH0.aDhfjB9n88kQwoA9X72OfIqPfqePxt56801b47mgDzw 
+Please read the instructions written in the PostMan collection description on how to navigate through the backend server.
 
- 
+Currently the server is hosted on Railway.app and has the DNS of : https://projectinnovate-it1e-backend-production.up.railway.app
 
-Each JWT token includes information about: 
+Please use the following link and store it as a global variable in PostMan with the variable name of webBaseURL and with the current value of ---link---.
 
-User-ID 
+If you decide to run the server locally, please replace  the ---link--- value with "localhost:8082" and create a 
+.env file with the provided information from the envVariables.txt file
 
-Email address 
+
