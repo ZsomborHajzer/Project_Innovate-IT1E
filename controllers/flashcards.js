@@ -86,7 +86,7 @@ exports.newDeck = async (req, res) => {
         return res.status(418).json({ Message: "No Deck was created" })
     }
 
-    const errors = validationResult(req);
+    //const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
         const error = new Error("Validation Failed.");
