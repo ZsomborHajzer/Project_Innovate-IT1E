@@ -60,7 +60,7 @@ exports.getDeck = async (req, res) => {
                 returnedJson[flashcardIdKey] = flashcardIdValue;
                 objArr.push(returnedJson);
             }
-            res.status(201).json(objArr);
+            res.status(201).json({ flashcards: objArr });
         } catch (err) {
             res.status(400).json({ message: "Deck not found" });
         }
@@ -92,7 +92,7 @@ exports.newDeck = async (req, res) => {
         const error = new Error("Validation Failed.");
         error.statusCode = 400;
         error.data = errors.array();
-        throw error;
+        return res.status(400).json({ message: errors.array()[0].msg });
     }
     const title = req.body.title;
 
