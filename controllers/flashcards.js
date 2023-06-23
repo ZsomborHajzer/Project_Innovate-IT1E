@@ -86,14 +86,14 @@ exports.newDeck = async (req, res) => {
         return res.status(418).json({ Message: "No Deck was created" })
     }
 
-    //const errors = validationResult(req);
+    const errors = validationResult(req);
 
-    /* if (!errors.isEmpty()) {
-         const error = new Error("Validation Failed.");
-         error.statusCode = 400;
-         error.data = errors.array();
-         return res.status(400).json({ message: errors.array()[0].msg });
-     }*/
+    if (!errors.isEmpty()) {
+        const error = new Error("Validation Failed.");
+        error.statusCode = 400;
+        error.data = errors.array();
+        return res.status(400).json({ message: errors.array()[0].msg });
+    }
     const title = req.body.title;
 
     if (title === null || title === undefined || title === "") {
@@ -105,6 +105,8 @@ exports.newDeck = async (req, res) => {
         setTitle: title,
         flashcards: []
     });
+
+
     await deck.save();
     await flashcardCollection.findOneAndUpdate({ _id: deck.collectionId }, { $push: { decks: deck } });
 

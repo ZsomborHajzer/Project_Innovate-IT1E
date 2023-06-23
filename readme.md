@@ -160,7 +160,7 @@ If you decide to run the server locally, please replace  the ---link--- value wi
 .env file with the provided information from the envVariables.txt file
 
 <!-- PostMan -->  
-### :shipit::PostMan 
+### :shipit: PostMan 
 
 **Introduction**
 This is the Backend API request demo for Project Innovate IT1E. This description includes the variables needed to get this collection working,
