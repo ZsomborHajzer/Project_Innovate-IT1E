@@ -26,6 +26,7 @@ Maybe you can mention me or this repo in the acknowledgements too
 - [Run Locally](#running-run-locally)
 - [Deployment](#triangular_flag_on_post-deployment)
 - [Usage](#eyes-usage)
+- [PostMan](#shipit)
 </br>
 
 
@@ -145,8 +146,10 @@ For this we have built a PostMan request collection to both test and present our
 This collection can be accessed from the following link:
 <a href=https://www.postman.com/galactic-space-226728/workspace/project-innovate-backend>https://www.postman.com/galactic-space-226728/workspace/project-innovate-backend</a>
 
+Sadly we have managed to break the postman description by uploading a screenshot therefore as of right now we are unable to edit the description in postman.
 
-Please read the instructions written in the PostMan collection description on how to navigate through the backend server.
+For this reason we ask you to ignore the description written there.
+
 
 Currently the server is hosted on Railway.app and has the DNS of : https://projectinnovate-it1e-backend-production.up.railway.app
 
@@ -156,3 +159,4 @@ If you decide to run the server locally, please replace  the ---link--- value wi
 .env file with the provided information from the envVariables.txt file
 
 
+## :shipit: PostMan 

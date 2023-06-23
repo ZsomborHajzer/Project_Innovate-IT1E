@@ -25,7 +25,7 @@ exports.getPost = async (req, res) => {
             if (comments === null) comments = [];
             res.status(200).json({ question: question, comments: comments });
         } catch (err) {
-            res.status(400).json({ message: "Invalid Input" });
+            res.status(400).json({ message: "Invalid Input, Please do not mess with the URL " });
         }
 
     } else if (req.method === "PATCH") {
@@ -37,7 +37,7 @@ exports.getPost = async (req, res) => {
         if (type === "question") {
             const existingVote = await User.findOne({ _id: userId, questionVotes: id });
 
-            if (existingVote) return res.status(403).json({ message: "User has already voted on this post" });
+            if (existingVote) return res.status(400).json({ message: "User has already voted on this post" });
 
             if (value === "1") {
                 await Question.findOneAndUpdate({ _id: id }, { $inc: { votes: value } });
@@ -51,7 +51,7 @@ exports.getPost = async (req, res) => {
         } else if (type === "comment") {
             const existingVote = await User.findOne({ _id: userId, commentVotes: id });
 
-            if (existingVote) return res.status(403).json({ message: "User has already voted on this comment" });
+            if (existingVote) return res.status(400).json({ message: "User has already voted on this comment" });
 
             if (value === "1") {
                 await Comment.findOneAndUpdate({ _id: id }, { $inc: { votes: value } });
@@ -98,7 +98,7 @@ exports.newComment = async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        return res.status(422).json({ message: "Invalid Input" });
+        return res.status(400).json({ message: "Invalid Input" });
     }
     try {
         const comment = req.body.comment;
