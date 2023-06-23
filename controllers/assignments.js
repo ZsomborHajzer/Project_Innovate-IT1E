@@ -22,7 +22,6 @@ exports.getSpecificAssigment = async (req, res) => {
         const topic = req.query.topic;
         const questionNum = req.query.questionNum;
         const questionObj = await Assignments.findOne({ topic: topic });
-
         if (questionObj === null) return res.status(400).json({ message: "Question not found" });
 
         for (let i = 0; i < questionObj.questions.length; i++) {
@@ -41,6 +40,7 @@ exports.getSpecificAssigment = async (req, res) => {
 
         if (topic === "PHP") {
             const achievementObj = await Achievements.findOne({ "Topic": title });
+            if (achievementObj === null) return res.status(400).json({ message: "Achievement not found" });
             const userObj = await User.findOne({ _id: req.userId });
 
             if (userObj === null) return res.status(400).json({ message: "User not found" });

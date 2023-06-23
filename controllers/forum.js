@@ -15,15 +15,18 @@ exports.getPost = async (req, res) => {
 
     if (req.method === "GET") {
 
-        if (!req.query.questionId) return res.status(422).json({ message: "Invalid Input" });
         const questionId = req.query.questionId;
-        const question = await Question.findById(questionId);
+        try {
+            const question = await Question.findById(questionId);
 
-        if (question === null) return res.status(422).json({ message: "No Question in existence" });
-        const comments = await Comment.find({ questionId: questionId });
+            if (question === null) return res.status(400).json({ message: "No Question in existence" });
+            const comments = await Comment.find({ questionId: questionId });
 
-        if (comments === null) comments = [];
-        res.status(200).json({ question: question, comments: comments });
+            if (comments === null) comments = [];
+            res.status(200).json({ question: question, comments: comments });
+        } catch (err) {
+            res.status(400).json({ message: "Invalid Input" });
+        }
 
     } else if (req.method === "PATCH") {
         const userId = req.userId;
