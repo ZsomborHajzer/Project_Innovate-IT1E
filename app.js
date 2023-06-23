@@ -22,6 +22,7 @@ app.use(morgan("dev"));
 app.use(cors({ origin: true, credentrials: true }));
 app.use(bodyParser.json());
 
+// preflight cors request handeling
 app.options('*', cors())
 
 //error handeling
@@ -32,7 +33,7 @@ app.use((error, req, res, next) => {
     res.status(status).json({ message: message, data: data });
 })
 
-// routes
+// routes 
 const indexRoutes = require('./routes/index');
 app.use("/", indexRoutes);
 
