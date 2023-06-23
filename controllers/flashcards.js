@@ -88,12 +88,12 @@ exports.newDeck = async (req, res) => {
 
     //const errors = validationResult(req);
 
-    if (!errors.isEmpty()) {
-        const error = new Error("Validation Failed.");
-        error.statusCode = 400;
-        error.data = errors.array();
-        return res.status(400).json({ message: errors.array()[0].msg });
-    }
+    /* if (!errors.isEmpty()) {
+         const error = new Error("Validation Failed.");
+         error.statusCode = 400;
+         error.data = errors.array();
+         return res.status(400).json({ message: errors.array()[0].msg });
+     }*/
     const title = req.body.title;
 
     if (title === null || title === undefined || title === "") {
