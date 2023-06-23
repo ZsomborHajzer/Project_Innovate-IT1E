@@ -22,6 +22,8 @@ app.use(morgan("dev"));
 app.use(cors({ origin: true, credentrials: true }));
 app.use(bodyParser.json());
 
+app.options('*', cors())
+
 //error handeling
 app.use((error, req, res, next) => {
     const status = error.statusCode || 500;
