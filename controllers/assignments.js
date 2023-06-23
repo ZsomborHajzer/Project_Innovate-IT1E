@@ -20,21 +20,28 @@ exports.getSpecificAssigment = async (req, res) => {
 
     if (req.method === "GET") {
         try {
+
             const topic = req.query.topic;
             const questionNum = req.query.questionNum;
-            if (questionNum <= 0) questionNum = 1;
+            const assignment = await Assignments.findOne({ topic: topic });
+
+            if (assignment === null) return res.status(400).json({ message: "Assignment not found" });
+
+            console.log(questionNum);
+
+            // if (questionNum <= 0) questionNum = 1;
             const questionObj = await Assignments.findOne({ topic: topic });
             if (questionObj === null) return res.status(400).json({ message: "Question not found" });
 
             for (let i = 0; i < questionObj.questions.length; i++) {
-                if (questionObj.questions[i].questionNum === questionNum) {
-                    res.status(200).json({ question: questionObj.questions[i] });
-                    return;
+                if (questionObj.questions[i].questionNum == questionNum) {
+                    return res.status(200).json({ question: questionObj.questions[i] });
+
                 }
             }
-            res.status(400).json({ message: "Question not found" });
+            return res.status(400).json({ message: "Question not found" });
         } catch (err) {
-            res.status(400).json({ message: err });
+            return res.status(400).json({ message: err });
         }
     }
 
