@@ -27,6 +27,7 @@ Maybe you can mention me or this repo in the acknowledgements too
 - [Deployment](#triangular_flag_on_post-deployment)
 - [Usage](#eyes-usage)
 - [PostMan](#shipit)
+
 </br>
 
 
@@ -137,7 +138,7 @@ Start the server
 ```
 
 <!-- Usage -->  
-## :eyes: Usage
+### :eyes: Usage
 
 Since this is a back-end server that communicates with the frontend through REST APIs, it is difficult to represent all of its capabilities visually.
 
@@ -158,5 +159,10 @@ Please use the following link and store it as a global variable in PostMan with 
 If you decide to run the server locally, please replace  the ---link--- value with "localhost:8082" and create a 
 .env file with the provided information from the envVariables.txt file
 
-
+<!-- PostMan -->  
 ## :shipit: PostMan 
+
+**Introduction**
+This is the Backend API request demo for Project Innovate IT1E. This description includes the variables needed to get this collection working,
+ and the order of operations required to mimic the front end. Due to the our limited experience with postman, this collection is semi-dynamic 
+ with variable automaziation therefore at some parts we ask you to follow the order of requests to show the capabilities of the backend server.
