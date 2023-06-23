@@ -78,7 +78,7 @@ exports.login = async (req, res, next) => {
                 throw error;
             }
             loadedFlashcardCollection = await getCollectionId(loadedUser._id);
-            const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString(), collectionId: loadedFlashcardCollection.toString(), firstName: loadedUser.firstName, lastName: loadedUser.lastName, email: loadedUser.email }, 'JWTSECRETTOKEN', { expiresIn: '100h' });
+            const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString(), collectionId: loadedFlashcardCollection.toString(), firstName: loadedUser.firstName, lastName: loadedUser.lastName, email: loadedUser.email }, 'JWTSECRETTOKEN', { expiresIn: '10h' });
             res.status(200).json({ token: token })
         })
         .catch(err => {

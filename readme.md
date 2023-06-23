@@ -163,6 +163,29 @@ If you decide to run the server locally, please replace  the ---link--- value wi
 ### :shipit: PostMan 
 
 **Introduction**
+<br>
 This is the Backend API request demo for Project Innovate IT1E. This description includes the variables needed to get this collection working,
  and the order of operations required to mimic the front end. Due to the our limited experience with postman, this collection is semi-dynamic 
  with variable automaziation therefore at some parts we ask you to follow the order of requests to show the capabilities of the backend server.
+
+ **Postman Setup**
+<br>
+
+ 1. Please follow the link https://www.postman.com/galactic-space-226728/workspace/project-innovate-backend
+ 2. For every collection that you see in this workspace please fork it to one of your own workspaces.
+ 3. Please assign a current value to the global variable "webBaseURL" with https://projectinnovate-it1e-backend-production.up.railway.app or if you are hosting the server from your laptop please assign it localhost:8082
+
+ <br>
+
+**Postman Guide**
+<br>
+
+1. Please either create a new account or log in through the collection named: Register/Login/Auth  Login credentials should be provided in the body of the login request.
+2. Progress collection is free to use in any order
+3. Profile collection is free to use in any order
+4. In order to use the Forum collection please use the "Get all questions" request first, then "Get specific post" request second. This creates variable which are then used in other reuquests such as the update vote / update comment requests.
+5. In the flashcards collection if you are using a newly created account please use the "create new deck request" first then use the "get decks request"
+6. If you are using an already set up account, please use the "get decks request"
+7. The ChatGPT test creation collectiion is free to use in any order
+8. Assignments collection is free to use in any order.
+9. Achievments collection is free to use in any order.
